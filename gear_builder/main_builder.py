@@ -4,6 +4,11 @@ import sys
 import json
 import pwd
 
+'''
+This is an interaactive script which is used to assemble and update Flywheel
+gears for the forwardModel and ldog projects.
+'''
+
 def main_builder():
     
 ###################### Set some initial paths #################################
@@ -21,9 +26,9 @@ def main_builder():
     cont = input('Warning! This script temporarily renames your matlab startup file to nostartup.m for the compiling process. The script discards this change at the end of the compiling process. Do you want to continue ? y/n ')
     if cont == 'y':
         os.system('mv %s %s' % (os.path.join(path_to_matlab_doc, 'startup.m'), os.path.join(path_to_matlab_doc, 'nostartup.m')))
-        startuptwo = '/home/ozzy/matlab/'
+        startuptwo = '/home/%s/matlab/' % pwd.getpwuid(os.getuid()).pw_name
         if os.listdir(startuptwo) != []:
-            os.system('rm /home/ozzy/matlab/*')    
+            os.system('mv %s/startup.m %s/nastartup.m' % startuptwo)    
     else:
         sys.exit("Application Stopped")
 

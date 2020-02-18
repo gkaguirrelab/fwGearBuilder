@@ -1,5 +1,10 @@
 import os 
 
+'''
+This script contains the functions which compile matlab code for the forwardModel
+and ldog projects. These functions are imported by the main_builder.py
+'''
+
 def compile_calcCorticalMag(path_to_matlab_documents, output_folder):
     
     # Create the output folder if doesn't exist
@@ -83,9 +88,9 @@ def compile_regressMotion(path_to_matlab_documents, output_folder):
     
     #mcc_path = '/usr/local/MATLAB/R2018b/bin/mcc'
     mcc_path = 'mcc'
-    mcc_call = '%s -m -R -nodisplay %s -I %s -d %s -v'%(mcc_path, os.path.join(path_to_matlab_documents,'/home/ozzy/Documents/MATLAB/projects/mriLDOGAnalysis/matlab/regressMotion.m'),  
+    mcc_call5 = '%s -m -R -nodisplay %s -I %s -d %s -v'%(mcc_path, os.path.join(path_to_matlab_documents,'/home/ozzy/Documents/MATLAB/projects/mriLDOGAnalysis/matlab/regressMotion.m'),  
                                                         os.path.join(path_to_matlab_documents,'toolboxes/freesurferMatlab/matlab/'),
                                                         output_folder)
     
     print('Compiling regressMotion.m')
-    os.system(mcc_call)
+    os.system(mcc_call5)
