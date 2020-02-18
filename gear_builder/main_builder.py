@@ -174,9 +174,9 @@ def main_builder():
         data = json.load(f)
         data['version'] = gear_version 
         if gear_name == 'forwardmodel':
-            data['author'] == 'Geoffrey Aguirre'
+            data['author'] = 'Geoffrey K. Aguirre'
         elif gear_name == 'bayesianfitting':
-            data['author'] == 'Noah C. Benson'            
+            data['author'] = 'Noah C. Benson'            
         else:
             data['author'] = 'Ozenc Taskin'
         data['maintainer'] = 'Ozenc Taskin' 
