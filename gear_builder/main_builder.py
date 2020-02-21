@@ -27,10 +27,9 @@ def main_builder():
     if cont == 'y':
         os.system('mv %s %s' % (os.path.join(path_to_matlab_doc, 'startup.m'), os.path.join(path_to_matlab_doc, 'nostartup.m')))
         startuptwo = '/home/%s/matlab/' % pwd.getpwuid(os.getuid()).pw_name
-        if os.listdir(startuptwo) != []:
-            os.system('mv %s/startup.m %s/nastartup.m' % startuptwo)    
-    else:
-        sys.exit("Application Stopped")
+        if not os.path.exists(startuptwo):        
+            if os.listdir(startuptwo) != []:
+                os.system('mv %s/startup.m %s/nastartup.m' % startuptwo)    
 
 ####################### Compile the required functions ########################        
   
