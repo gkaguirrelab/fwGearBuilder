@@ -25,7 +25,8 @@ def main_builder():
  
     cont = input('Warning! This script temporarily renames your matlab startup file to nostartup.m for the compiling process. The script discards this change at the end of the compiling process. Do you want to continue ? y/n ')
     if cont == 'y':
-        os.system('mv %s %s' % (os.path.join(path_to_matlab_doc, 'startup.m'), os.path.join(path_to_matlab_doc, 'nostartup.m')))
+        if os.path.exists(os.path.join(path_to_matlab_doc, 'startup.m')):
+            os.system('mv %s %s' % (os.path.join(path_to_matlab_doc, 'startup.m'), os.path.join(path_to_matlab_doc, 'nostartup.m')))
         startuptwo = '/home/%s/matlab/' % pwd.getpwuid(os.getuid()).pw_name
         if not os.path.exists(startuptwo):        
             if os.listdir(startuptwo) != []:
