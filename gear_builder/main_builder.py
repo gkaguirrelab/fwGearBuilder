@@ -20,10 +20,13 @@ def main_builder():
     # path_to_matlab_doc = path to your main MATLAB folder (usually in documents)
     # gear_version = the version number you want to bump the gear
     # test = Is whether you want to test the gear after building. Default n - false 
-    print("The gear builder is starting. Make sure you pulled all changes on github")    
+    print("The gear builder is starting.")    
     path_to_matlab_doc = '/home/%s/Documents/MATLAB/' % pwd.getpwuid(os.getuid()).pw_name
- 
-    cont = input('Warning! This script temporarily renames your matlab startup file to nostartup.m for the compiling process. The script discards this change at the end of the compiling process. Do you want to continue ? y/n ')
+
+    print('Running tbUSe')
+    os.system('cd %s; matlab -r -nodisplay \'gearBuilderAutotbUse\(\);\'' % os.path.join(path_to_matlab_doc, 'projects', 'fwGearBuilder','gear_builder'))
+    
+    cont = input('\nWarning! This script temporarily renames your matlab startup file to nostartup.m for the compiling process. The script discards this change at the end of the compiling process. Do you want to continue ? y/n ')
     if cont == 'y':
         if os.path.exists(os.path.join(path_to_matlab_doc, 'startup.m')):
             os.system('mv %s %s' % (os.path.join(path_to_matlab_doc, 'startup.m'), os.path.join(path_to_matlab_doc, 'nostartup.m')))
@@ -34,8 +37,10 @@ def main_builder():
 
 ####################### Compile the required functions ########################        
   
-    which_number = input('Which gear you wnat to update ? Enter a number:\n1-forwardmodel\n2-bayesianfitting\n3-ldogstruct\n4-ldogfunc\n5-ldogfix\nEnter a number:')
+    which_number = input('\nWhich gear you wnat to update ? Enter a number:\n1-forwardmodel\n2-bayesianfitting\n3-ldogstruct\n4-ldogfunc\n5-ldogfix\nEnter a number:')
     if which_number == '1':
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModelWrapper'))
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModel'))
         gear_name = 'forwardmodel'
         gear_version = input('What will be the new gear version:')
         print('starting forwardmodel building')
@@ -51,6 +56,8 @@ def main_builder():
                                 'fw_gears', 'forwardModel',
                                 'main_gear')
     elif which_number == '2':
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModelWrapper'))
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModel'))        
         gear_name = 'bayesianfitting'        
         gear_version = input('What will be the new gear version:')
         frame = os.path.join(path_to_matlab_doc, 'projects', 
@@ -71,6 +78,7 @@ def main_builder():
                                 'fw_gears', 'bayesianFitting',
                                 'main_gear')   
     elif which_number == '3':
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis'))
         gear_name = 'ldogstruct'
         gear_version = input('What will be the new gear version:')
         frame = os.path.join(path_to_matlab_doc, 'projects', 
@@ -96,6 +104,7 @@ def main_builder():
         os.system(fw_download_command)
         
     elif which_number == '4':
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis'))        
         gear_name = 'ldogfunc'
         gear_version = input('What will be the new gear version:')
         frame = os.path.join(path_to_matlab_doc, 'projects', 
@@ -107,6 +116,7 @@ def main_builder():
                                 'fw_gears', 'ldog_func',
                                 'main_gear')     
     elif which_number == '5':
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis'))        
         gear_name = 'ldogfix'
         gear_version = input('What will be the new gear version:')
         frame = os.path.join(path_to_matlab_doc, 'projects', 
