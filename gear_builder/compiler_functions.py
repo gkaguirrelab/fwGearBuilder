@@ -44,7 +44,7 @@ def compile_forwardModel(path_to_matlab_documents, output_folder):
     os.path.join(path_to_matlab_documents,'toolboxes/progressBar/'),
     output_folder)
     
-    print('Compiling mainPRF.m')
+    print('Compiling mainWrapper.m')
     os.system(mcc_call2)
 
 def compile_postprocessBayes(path_to_matlab_documents, output_folder):

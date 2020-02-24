@@ -23,7 +23,7 @@ def main_builder():
     print("The gear builder is starting.")    
     path_to_matlab_doc = '/home/%s/Documents/MATLAB/' % pwd.getpwuid(os.getuid()).pw_name
 
-    print('Pulling the master form Git')
+    print('Pulling the git repos')
     os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModelWrapper'))
     os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModel'))    
     os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis'))
@@ -31,7 +31,7 @@ def main_builder():
     print('Running tbUSe')
     os.system('cd %s; matlab -r -nodisplay \'gearBuilderAutotbUse\(\);\'' % os.path.join(path_to_matlab_doc, 'projects', 'fwGearBuilder','gear_builder'))
     
-    cont = input('\nWarning! This script temporarily renames your matlab startup file to nostartup.m for the compiling process. The script discards this change at the end of the compiling process. Do you want to continue ? y/n ')
+    cont = input('\nWarning! This script temporarily renames your matlab startup file to nostartup.m for compiling. The script discards this change when the compiling process is done. Do you want to continue ? y/n ')
     if cont == 'y':
         if os.path.exists(os.path.join(path_to_matlab_doc, 'startup.m')):
             os.system('mv %s %s' % (os.path.join(path_to_matlab_doc, 'startup.m'), os.path.join(path_to_matlab_doc, 'nostartup.m')))
@@ -44,7 +44,7 @@ def main_builder():
 
 ####################### Compile the required functions ########################        
   
-    which_number = input('\nWhich gear you wnat to update ? Enter a number:\n1-forwardmodel\n2-bayesianfitting\n3-ldogstruct\n4-ldogfunc\n5-ldogfix\nEnter a number:')
+    which_number = input('\nWhich gear would you like to update ? Enter a number:\n1-forwardmodel\n2-bayesianfitting\n3-ldogstruct\n4-ldogfunc\n5-ldogfix\nEnter a number:')
     if which_number == '1':
         gear_name = 'forwardmodel'
         gear_version = input('What will be the new gear version:')
@@ -210,8 +210,8 @@ def main_builder():
                 os.sytem('cd %s; fw gear local --averageAcquisitions 1 --dataFileType cifti --dataSourceType icafix \
                          --funcZip01 /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/icafix.zip \
                          --modelClass prfTimeShift --modelOpts \'(pixelsPerDegree),5.1751,(polyDeg),5,(screenMagnification),1.00,(hrfParams),[0.7476,-0.7178,-0.3492]\' --tr 0.8 \
-                         --stimFile /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/flashStimulus_1x1x450.mat \
-                         --structZip /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/TOME_3037_hcpstruct.zip' % mainfold)      
+                         --stimFile /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/pRFStimulus_108x108x420.mat \
+                         --structZip /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/TOME_3043_hcpstruct.zip' % mainfold)      
             else:
                 print('Unknown option entered, not testing')
         elif gear_name == 'ldogfix':
