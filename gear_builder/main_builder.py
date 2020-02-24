@@ -23,6 +23,11 @@ def main_builder():
     print("The gear builder is starting.")    
     path_to_matlab_doc = '/home/%s/Documents/MATLAB/' % pwd.getpwuid(os.getuid()).pw_name
 
+    print('Pulling the master form Git')
+    os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModelWrapper'))
+    os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModel'))    
+    os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis'))
+      
     print('Running tbUSe')
     os.system('cd %s; matlab -r -nodisplay \'gearBuilderAutotbUse\(\);\'' % os.path.join(path_to_matlab_doc, 'projects', 'fwGearBuilder','gear_builder'))
     
@@ -33,14 +38,14 @@ def main_builder():
         startuptwo = '/home/%s/matlab/' % pwd.getpwuid(os.getuid()).pw_name
         if os.path.exists(startuptwo):        
             if os.listdir(startuptwo) != []:
-                os.system('mv %s/startup.m %s/nastartup.m' % startuptwo)    
+                os.system('mv %s/startup.m %s/nastartup.m' % startuptwo)   
+    else:
+        sys.exit('Stopping the builder')
 
 ####################### Compile the required functions ########################        
   
     which_number = input('\nWhich gear you wnat to update ? Enter a number:\n1-forwardmodel\n2-bayesianfitting\n3-ldogstruct\n4-ldogfunc\n5-ldogfix\nEnter a number:')
     if which_number == '1':
-        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModelWrapper'))
-        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModel'))
         gear_name = 'forwardmodel'
         gear_version = input('What will be the new gear version:')
         print('starting forwardmodel building')
@@ -56,8 +61,6 @@ def main_builder():
                                 'fw_gears', 'forwardModel',
                                 'main_gear')
     elif which_number == '2':
-        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModelWrapper'))
-        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModel'))        
         gear_name = 'bayesianfitting'        
         gear_version = input('What will be the new gear version:')
         frame = os.path.join(path_to_matlab_doc, 'projects', 
@@ -78,7 +81,6 @@ def main_builder():
                                 'fw_gears', 'bayesianFitting',
                                 'main_gear')   
     elif which_number == '3':
-        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis'))
         gear_name = 'ldogstruct'
         gear_version = input('What will be the new gear version:')
         frame = os.path.join(path_to_matlab_doc, 'projects', 
@@ -104,7 +106,6 @@ def main_builder():
         os.system(fw_download_command)
         
     elif which_number == '4':
-        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis'))        
         gear_name = 'ldogfunc'
         gear_version = input('What will be the new gear version:')
         frame = os.path.join(path_to_matlab_doc, 'projects', 
@@ -116,7 +117,6 @@ def main_builder():
                                 'fw_gears', 'ldog_func',
                                 'main_gear')     
     elif which_number == '5':
-        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis'))        
         gear_name = 'ldogfix'
         gear_version = input('What will be the new gear version:')
         frame = os.path.join(path_to_matlab_doc, 'projects', 
