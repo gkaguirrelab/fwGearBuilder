@@ -88,7 +88,7 @@ def compile_regressMotion(path_to_matlab_documents, output_folder):
     
     #mcc_path = '/usr/local/MATLAB/R2018b/bin/mcc'
     mcc_path = 'mcc'
-    mcc_call5 = '%s -m -R -nodisplay %s -I %s -d %s -v'%(mcc_path, os.path.join(path_to_matlab_documents,'/home/ozzy/Documents/MATLAB/projects/mriLDOGAnalysis/matlab/regressMotion.m'),  
+    mcc_call5 = '%s -m -R -nodisplay %s -I %s -d %s -v'%(mcc_path, os.path.join(path_to_matlab_documents,'projects/mriLDOGAnalysis/matlab/regressMotion.m'),  
                                                         os.path.join(path_to_matlab_documents,'toolboxes/freesurferMatlab/matlab/'),
                                                         output_folder)
     
