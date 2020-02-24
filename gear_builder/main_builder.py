@@ -195,6 +195,51 @@ def main_builder():
         json.dump(data, f, indent=4)
         f.truncate()
 
+    testcall = input('Do you want to test the gear? Only available for the gear builder computer. Output can be found in repo directory/main_gear/output : y/n ')  
+    if testcall == 'y':
+        if gear_name == 'forwardmodel':
+            which_forward = input('Which forwardmodel do you want to test? v for volumetric, c for cifti: v/c') 
+            print('Starting forwardmodel gear')
+            if which_forward == 'v':
+                os.sytem('cd %s; fw gear local --averageAcquisitions 1 --dataFileType volumetric --dataSourceType ldogfix \
+                         --funcZip01 /home/gear-builder/Desktop/gear_test_files/forward_model/volumetric/lefteye.zip \
+                         --modelClass flobsHRF --modelOpts \'(polyDeg), 13\' --tr 3 \
+                         --stimFile /home/gear-builder/Desktop/gear_test_files/forward_model/volumetric/lightFluxFlicker_1x112_On\=0.mat \
+                         --structZip /home/gear-builder/Desktop/gear_test_files/forward_model/volumetric/M662_preprocessedStruct.zip' % mainfold)
+            elif which_forward == 'c':
+                os.sytem('cd %s; fw gear local --averageAcquisitions 1 --dataFileType cifti --dataSourceType icafix \
+                         --funcZip01 /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/icafix.zip \
+                         --modelClass prfTimeShift --modelOpts \'(pixelsPerDegree),5.1751,(polyDeg),5,(screenMagnification),1.00,(hrfParams),[0.7476,-0.7178,-0.3492]\' --tr 0.8 \
+                         --stimFile /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/flashStimulus_1x1x450.mat \
+                         --structZip /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/TOME_3037_hcpstruct.zip' % mainfold)      
+            else:
+                print('Unknown option entered, not testing')
+        elif gear_name == 'ldogfix':
+            print('Starting ldogfix gear')
+            os.system('cd %s; fw gear local --EPI_01 /home/gear-builder/Desktop/gear_test_files/ldog_fix/M662_left1_preprocessedFunc.zip \
+                      --EPI_02 /home/gear-builder/Desktop/gear_test_files/ldog_fix/M662_left2_preprocessedFunc.zip \
+                      --stimFile /home/gear-builder/Desktop/gear_test_files/ldog_fix/lightFluxFlicker_1x112_On=0.mat \
+                      --archiveName testArchive --smoothingSigma 2' % mainfold)
+        elif gear_name == 'ldogstruct':
+            print('Starting ldogstruct gear')
+            os.system('cd %s; fw gear local --MPRAGE_01 /home/gear-builder/Desktop/gear_test_files/ldog_struct/rage1.nii.gz \
+                      --MPRAGE_02 /home/gear-builder/Desktop/gear_test_files/ldog_struct/rage2.nii.gz \
+                      --centreOfGravityX 91 --centreOfGravityY 42 --centreOfGravityZ 95 --numberOfThreads 6 --subjectId M662_test' % mainfold)
+        elif gear_name == 'ldogfunc':
+            print('Starting ldogfunc gear')
+            os.system('cd %s; fw gear local --StructZip /home/gear-builder/Desktop/gear_test_files/ldof_func/M662_preprocessedStruct.zip \
+                      --additionalWarpToTemplate True --fMRIScoutAP /home/gear-builder/Desktop/gear_test_files/ldof_func/AP.nii.gz \
+                      --fMRIScoutPA /home/gear-builder/Desktop/gear_test_files/ldof_func/PA.nii.gz --fMRIName left1 \
+                      --fMRITimeSeries /home/gear-builder/Desktop/gear_test_files/ldof_func/left1.nii.gz' % mainfold)
+        elif gear_name == 'bayesianfitting':
+            print('Starting bayesianfitting gear')
+            os.system('cd %s; fw gear local --nativeMgzMaps /home/ozzy/Desktop/gear_test_files/bayessianfitting/TOME_3046_maps_nativeMGZ.zip \
+                      --radius-weight 0.25 --scale 100 --structZip /home/ozzy/Desktop/gear_test_files/bayessianfitting/TOME_3046_hcpstruct.zip' % mainfold)    
+        else:
+            print('Gear not found')
+    else:
+        print("Not testing the gear")
+        
     uploadcall = input('Do you want to upload the gear now? You can do it later by cd-ing into the main_folder and running fw gear upload : y/n ')  
     if uploadcall == 'y':
         os.system('cd %s; fw gear upload' % mainfold)
@@ -208,4 +253,5 @@ def main_builder():
             os.system('cd %s; rm *.zip *.gz' % frame_path)
         if delete_call == 'n':
             print('Not deleting the files downloaded from Flywheel. These files are too large to store on the lab github repo. Consider deleting them')
+            
 main_builder()
