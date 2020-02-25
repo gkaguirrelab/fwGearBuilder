@@ -176,7 +176,7 @@ def main_builder():
                 
     print('\n-- Select "Other" for the third question and decide whether you want an Analysis or Converter gear and enter the following as the container name:   "gkaguirrelab/%s:%s"'% (gear_name, gear_version))
          
-    os.system('cd %s; fw gear create' % mainfold)
+    os.system('cd %s; GODEBUG=netdns=go fw gear create' % mainfold)
         
 ###################### Modify the json and upload #############################
     
@@ -242,7 +242,7 @@ def main_builder():
         
     uploadcall = input('Do you want to upload the gear now? You can do it later by cd-ing into the main_folder and running fw gear upload : y/n ')  
     if uploadcall == 'y':
-        os.system('cd %s; fw gear upload' % mainfold)
+        os.system('cd %s; GODEBUG=netdns=go fw gear upload' % mainfold)
     else:
         print("Not uploading")
 
