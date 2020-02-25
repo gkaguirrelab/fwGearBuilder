@@ -8,9 +8,20 @@ import pwd
 This is an interaactive script which is used to assemble and update Flywheel
 gears for the forwardModel and ldog projects.
 '''
-
-def main_builder():
     
+def main_builder():
+
+    # Colorclass for warnings
+    class bcolors:
+        HEADER = '\033[95m'
+        OKBLUE = '\033[94m'
+        OKGREEN = '\033[92m'
+        WARNING = '\033[93m'
+        FAIL = '\033[91m'
+        ENDC = '\033[0m'
+        BOLD = '\033[1m'
+        UNDERLINE = '\033[4m'
+        
 ###################### Set some initial paths #################################
     
     # Please login to docker with the "docker login" command first and to flywheel 
@@ -44,10 +55,10 @@ def main_builder():
 
 ####################### Compile the required functions ########################        
   
-    which_number = input('\nWhich gear would you like to update ? Enter a number:\n1-forwardmodel\n2-bayesianfitting\n3-ldogstruct\n4-ldogfunc\n5-ldogfix\nEnter a number:')
+    which_number = input(bcolors.WARNING + '\nWhich gear would you like to update ? Enter a number:\n1-forwardmodel\n2-bayesianfitting\n3-ldogstruct\n4-ldogfunc\n5-ldogfix\nEnter a number:' + bcolors.ENDC)
     if which_number == '1':
         gear_name = 'forwardmodel'
-        gear_version = input('What will be the new gear version:')
+        gear_version = input(bcolors.WARNING + 'What will be the new gear version:' + bcolors.ENDC)
         print('starting forwardmodel building')
         frame = os.path.join(path_to_matlab_doc, 'projects', 
                              'forwardModelWrapper', 
@@ -62,7 +73,7 @@ def main_builder():
                                 'main_gear')
     elif which_number == '2':
         gear_name = 'bayesianfitting'        
-        gear_version = input('What will be the new gear version:')
+        gear_version = input(bcolors.WARNING + 'What will be the new gear version:' + bcolors.ENDC)
         frame = os.path.join(path_to_matlab_doc, 'projects', 
                              'forwardMtheodelWrapper', 
                              'fw_gears', 'bayesianFitting',
@@ -82,7 +93,7 @@ def main_builder():
                                 'main_gear')   
     elif which_number == '3':
         gear_name = 'ldogstruct'
-        gear_version = input('What will be the new gear version:')
+        gear_version = input(bcolors.WARNING + 'What will be the new gear version:' + bcolors.ENDC)
         frame = os.path.join(path_to_matlab_doc, 'projects', 
                              'mriLDOGAnalysis', 
                              'fw_gears', 'ldog_struct',
@@ -107,7 +118,7 @@ def main_builder():
         
     elif which_number == '4':
         gear_name = 'ldogfunc'
-        gear_version = input('What will be the new gear version:')
+        gear_version = input(bcolors.WARNING + 'What will be the new gear version:' + bcolors.ENDC)
         frame = os.path.join(path_to_matlab_doc, 'projects', 
                              'mriLDOGAnalysis', 
                              'fw_gears', 'ldog_func',
@@ -118,7 +129,7 @@ def main_builder():
                                 'main_gear')     
     elif which_number == '5':
         gear_name = 'ldogfix'
-        gear_version = input('What will be the new gear version:')
+        gear_version = input(bcolors.WARNING + 'What will be the new gear version:' + bcolors.ENDC)
         frame = os.path.join(path_to_matlab_doc, 'projects', 
                              'mriLDOGAnalysis', 
                              'fw_gears', 'ldog_fix',
@@ -148,33 +159,33 @@ def main_builder():
 
     if gear_name == 'forwardmodel':
         print('\n')
-        print('-- When asked to chose a human readable name use the following without the quotation marks:  "forwardModel: non-linear fitting of models to fMRI data"')
+        print(bcolors.WARNING + '-- When asked to chose a human readable name use the following without the quotation marks:  "forwardModel: non-linear fitting of models to fMRI data"' + bcolors.ENDC)
         print('\n')
-        print('-- When asked for a gear ID enter the following without the quotation marks:  "forwardmodel"')        
+        print(bcolors.WARNING + '-- When asked for a gear ID enter the following without the quotation marks:  "forwardmodel"' + bcolors.ENDC)        
     elif gear_name == 'bayesianfitting':
         print('\n')
-        print('-- When asked to chose a human readable name enter the following without the quotation marks:  "bayesPRF: template fitting of retinotopic maps using neuropythy"')
+        print(bcolors.WARNING + '-- When asked to chose a human readable name enter the following without the quotation marks:  "bayesPRF: template fitting of retinotopic maps using neuropythy"' + bcolors.ENDC)
         print('\n')
-        print('-- When asked for a gear ID enter the following without the quotation marks:  "bayesprf"')     
+        print(bcolors.WARNING + '-- When asked for a gear ID enter the following without the quotation marks:  "bayesprf"' + bcolors.ENDC)     
     elif gear_name == 'ldogstruct':
         print('\n')
-        print('-- When asked to chose a human readable name use the following without the quotation marks:  "ldogStruct: anatomical pre-processing for the LDOG project"')
+        print(bcolors.WARNING + '-- When asked to chose a human readable name use the following without the quotation marks:  "ldogStruct: anatomical pre-processing for the LDOG project"' + bcolors.ENDC)
         print('\n')
-        print('-- When asked for a gear ID enter the following without the quotation marks:  "ldogstruct"')     
+        print(bcolors.WARNING + '-- When asked for a gear ID enter the following without the quotation marks:  "ldogstruct"' + bcolors.ENDC)     
     elif gear_name == 'ldogfunc':
         print('\n')
-        print('-- When asked to chose a human readable name use the following without the quotation marks:  "ldogFunc: functional pre-processing for the LDOG project"')
+        print(bcolors.WARNING + '-- When asked to chose a human readable name use the following without the quotation marks:  "ldogFunc: functional pre-processing for the LDOG project"' + bcolors.ENDC)
         print('\n')
-        print('-- When asked for a gear ID enter the following without the quotation marks:  "ldogfunc"')            
+        print(bcolors.WARNING + '-- When asked for a gear ID enter the following without the quotation marks:  "ldogfunc"' + bcolors.ENDC)            
     elif gear_name == 'ldogfix':
         print('\n')
-        print('-- When asked to chose a human readable name use the following without the quotation marks:  "ldogFix: archiving ldogfunc outputs"')
+        print(bcolors.WARNING + '-- When asked to chose a human readable name use the following without the quotation marks:  "ldogFix: archiving ldogfunc outputs"' + bcolors.ENDC)
         print('\n')
-        print('-- When asked for a gear ID enter the following without the quotation marks:  "ldogfix"')    
+        print(bcolors.WARNING + '-- When asked for a gear ID enter the following without the quotation marks:  "ldogfix"' + bcolors.ENDC)    
     else:
         print('Unknown gear')        
                 
-    print('\n-- Select "Other" for the third question and decide whether you want an Analysis or Converter gear and enter the following as the container name:   "gkaguirrelab/%s:%s"'% (gear_name, gear_version))
+    print(bcolors.WARNING + '\n-- Select "Other" for the third question and select "Analysis". Enter the following as the container name:   "gkaguirrelab/%s:%s"'% (gear_name, gear_version) + bcolors.ENDC)
          
     os.system('cd %s; GODEBUG=netdns=go fw gear create' % mainfold)
         
@@ -195,10 +206,10 @@ def main_builder():
         json.dump(data, f, indent=4)
         f.truncate()
 
-    testcall = input('Do you want to test the gear? Only available for the gear builder computer. Output can be found in repo directory/main_gear/output : y/n ')  
+    testcall = input(bcolors.WARNING + 'Do you want to test the gear? Only available for the gear builder computer. Output can be found in repo directory/main_gear/output : y/n ' + bcolors.ENDC)  
     if testcall == 'y':
         if gear_name == 'forwardmodel':
-            which_forward = input('Which forwardmodel do you want to test? v for volumetric, c for cifti: v/c') 
+            which_forward = input(bcolors.WARNING + 'Which forwardmodel do you want to test? v for volumetric, c for cifti: v/c' + bcolors.ENDC) 
             print('Starting forwardmodel gear')
             if which_forward == 'v':
                 tester = ('cd %s; fw gear local --averageAcquisitions 1 --dataFileType volumetric --dataSourceType ldogfix'
@@ -239,18 +250,19 @@ def main_builder():
             sys.exit('Gear not found')
         
         # Run the tester string
+        print('RUNNING: %s' % tester)
         os.system(tester)
     else:
         print("Not testing the gear")
         
-    uploadcall = input('Do you want to upload the gear now? You can do it later by cd-ing into the main_folder and running fw gear upload : y/n ')  
+    uploadcall = input(bcolors.WARNING + 'Do you want to upload the gear now? You can do it later by cd-ing into the main_folder and running fw gear upload : y/n ' + bcolors.ENDC)  
     if uploadcall == 'y':
         os.system('cd %s; GODEBUG=netdns=go fw gear upload' % mainfold)
     else:
         print("Not uploading")
 
     if which_number == '3':
-        delete_call = input('The files downloaded from Flywheel into ldgog_struct_frame will be deleted now. Do you want to continue : y/n ')
+        delete_call = input(bcolors.WARNING + 'The files downloaded from Flywheel into ldgog_struct_frame will be deleted now. Do you want to continue : y/n ' + bcolors.ENDC)
         if delete_call == 'y':
             frame_path = os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis', 'fw_gears', 'ldog_struct', 'ldog_struct_frame')
             os.system('cd %s; rm *.zip *.gz' % frame_path)
