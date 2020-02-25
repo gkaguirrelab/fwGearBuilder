@@ -42,7 +42,7 @@ def main_builder():
     print('Running tbUSe')
     os.system('cd %s; matlab -r -nodisplay \'gearBuilderAutotbUse\(\);\'' % os.path.join(path_to_matlab_doc, 'projects', 'fwGearBuilder','gear_builder'))
     
-    cont = input('\nWarning! This script temporarily renames your matlab startup file to nostartup.m for compiling. The script discards this change when the compiling process is done. Do you want to continue ? y/n ')
+    cont = input(bcolors.WARNING + '\nWarning! This script temporarily renames your matlab startup file to nostartup.m for compiling. The script discards this change when the compiling process is done. Do you want to continue ? y/n ' + bcolors.ENDC)
     if cont == 'y':
         if os.path.exists(os.path.join(path_to_matlab_doc, 'startup.m')):
             os.system('mv %s %s' % (os.path.join(path_to_matlab_doc, 'startup.m'), os.path.join(path_to_matlab_doc, 'nostartup.m')))
@@ -185,7 +185,7 @@ def main_builder():
     else:
         print('Unknown gear')        
                 
-    print(bcolors.WARNING + '\n-- Select "Other" for the third question and select "Analysis". Enter the following as the container name:   "gkaguirrelab/%s:%s"'% (gear_name, gear_version) + bcolors.ENDC)
+    print(bcolors.WARNING + '\n-- Select "Other" for the third question enter the following docker image name without the quotation marks and select Analysis:   "gkaguirrelab/%s:%s"'% (gear_name, gear_version) + bcolors.ENDC)
          
     os.system('cd %s; GODEBUG=netdns=go fw gear create' % mainfold)
         
@@ -213,39 +213,39 @@ def main_builder():
             print('Starting forwardmodel gear')
             if which_forward == 'v':
                 tester = ('cd %s; fw gear local --averageAcquisitions 1 --dataFileType volumetric --dataSourceType ldogfix'
-                          '--funcZip01 /home/gear-builder/Desktop/gear_test_files/forward_model/volumetric/lefteye.zip'
-                          '--modelClass flobsHRF --modelOpts \'(polyDeg), 13\' --tr 3'
-                          '--stimFile /home/gear-builder/Desktop/gear_test_files/forward_model/volumetric/lightFluxFlicker_1x112_On\=0.mat'
-                          '--structZip /home/gear-builder/Desktop/gear_test_files/forward_model/volumetric/M662_preprocessedStruct.zip' % mainfold)
+                          ' --funcZip01 /home/gear-builder/Desktop/gear_test_files/forward_model/volumetric/lefteye.zip'
+                          ' --modelClass flobsHRF --modelOpts \'(polyDeg), 13\' --tr 3'
+                          ' --stimFile /home/gear-builder/Desktop/gear_test_files/forward_model/volumetric/lightFluxFlicker_1x112_On\=0.mat'
+                          ' --structZip /home/gear-builder/Desktop/gear_test_files/forward_model/volumetric/M662_preprocessedStruct.zip' % mainfold)
             elif which_forward == 'c':
                 tester = ('cd %s; fw gear local --averageAcquisitions 1 --dataFileType cifti --dataSourceType icafix'
-                          '--funcZip01 /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/icafix.zip'
-                          '--modelClass prfTimeShift --modelOpts \'(pixelsPerDegree),5.1751,(polyDeg),5,(screenMagnification),1.00,(hrfParams),[0.7476,-0.7178,-0.3492]\' --tr 0.8'
-                          '--stimFile /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/pRFStimulus_108x108x420.mat'
-                          '--structZip /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/TOME_3043_hcpstruct.zip' % mainfold)         
+                          ' --funcZip01 /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/icafix.zip'
+                          ' --modelClass prfTimeShift --modelOpts \'(pixelsPerDegree),5.1751,(polyDeg),5,(screenMagnification),1.00,(hrfParams),[0.7476,-0.7178,-0.3492]\' --tr 0.8'
+                          ' --stimFile /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/pRFStimulus_108x108x420.mat'
+                          ' --structZip /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/TOME_3043_hcpstruct.zip' % mainfold)         
             else:
                 print('Unknown option entered, not testing')
         elif gear_name == 'ldogfix':
             print('Starting ldogfix gear')
             tester = ('cd %s; fw gear local --EPI_01 /home/gear-builder/Desktop/gear_test_files/ldog_fix/M662_left1_preprocessedFunc.zip'
-                      '--EPI_02 /home/gear-builder/Desktop/gear_test_files/ldog_fix/M662_left2_preprocessedFunc.zip'
-                      '--stimFile /home/gear-builder/Desktop/gear_test_files/ldog_fix/lightFluxFlicker_1x112_On=0.mat'
-                      '--archiveName testArchive --smoothingSigma 2' % mainfold)
+                      ' --EPI_02 /home/gear-builder/Desktop/gear_test_files/ldog_fix/M662_left2_preprocessedFunc.zip'
+                      ' --stimFile /home/gear-builder/Desktop/gear_test_files/ldog_fix/lightFluxFlicker_1x112_On=0.mat'
+                      ' --archiveName testArchive --smoothingSigma 2' % mainfold)
         elif gear_name == 'ldogstruct':
             print('Starting ldogstruct gear')
             tester = ('cd %s; fw gear local --MPRAGE_01 /home/gear-builder/Desktop/gear_test_files/ldog_struct/rage1.nii.gz'
-                      '--MPRAGE_02 /home/gear-builder/Desktop/gear_test_files/ldog_struct/rage2.nii.gz'
-                      '--centreOfGravityX 91 --centreOfGravityY 42 --centreOfGravityZ 95 --numberOfThreads 6 --subjectId M662_test' % mainfold)
+                      ' --MPRAGE_02 /home/gear-builder/Desktop/gear_test_files/ldog_struct/rage2.nii.gz'
+                      ' --centreOfGravityX 91 --centreOfGravityY 42 --centreOfGravityZ 95 --numberOfThreads 6 --subjectId M662_test' % mainfold)
         elif gear_name == 'ldogfunc':
             print('Starting ldogfunc gear')
             tester = ('cd %s; fw gear local --StructZip /home/gear-builder/Desktop/gear_test_files/ldof_func/M662_preprocessedStruct.zip'
-                      '--additionalWarpToTemplate True --fMRIScoutAP /home/gear-builder/Desktop/gear_test_files/ldof_func/AP.nii.gz'
-                      '--fMRIScoutPA /home/gear-builder/Desktop/gear_test_files/ldof_func/PA.nii.gz --fMRIName left1'
-                      '--fMRITimeSeries /home/gear-builder/Desktop/gear_test_files/ldof_func/left1.nii.gz' % mainfold)
+                      ' --additionalWarpToTemplate True --fMRIScoutAP /home/gear-builder/Desktop/gear_test_files/ldof_func/AP.nii.gz'
+                      ' --fMRIScoutPA /home/gear-builder/Desktop/gear_test_files/ldof_func/PA.nii.gz --fMRIName left1'
+                      ' --fMRITimeSeries /home/gear-builder/Desktop/gear_test_files/ldof_func/left1.nii.gz' % mainfold)
         elif gear_name == 'bayesianfitting':
             print('Starting bayesianfitting gear')
             tester = ('cd %s; fw gear local --nativeMgzMaps /home/ozzy/Desktop/gear_test_files/bayessianfitting/TOME_3046_maps_nativeMGZ.zip'
-                      '--radius-weight 0.25 --scale 100 --structZip /home/ozzy/Desktop/gear_test_files/bayessianfitting/TOME_3046_hcpstruct.zip' % mainfold)    
+                      ' --radius-weight 0.25 --scale 100 --structZip /home/ozzy/Desktop/gear_test_files/bayessianfitting/TOME_3046_hcpstruct.zip' % mainfold)    
         else:
             sys.exit('Gear not found')
         
