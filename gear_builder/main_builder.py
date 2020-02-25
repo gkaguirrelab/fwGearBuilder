@@ -10,7 +10,7 @@ gears for the forwardModel and ldog projects.
 '''
     
 def main_builder():
-
+    
     # Colorclass for warnings
     class bcolors:
         HEADER = '\033[95m'
@@ -33,6 +33,10 @@ def main_builder():
     # test = Is whether you want to test the gear after building. Default n - false 
     print("The gear builder is starting.")    
     path_to_matlab_doc = '/home/%s/Documents/MATLAB/' % pwd.getpwuid(os.getuid()).pw_name
+    
+    # Pull the latest version 
+    print('Pulling the latest version of the gear builder from Git')
+    os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'fwGearBuilder'))
 
     print('Pulling the git repos')
     os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModelWrapper'))
