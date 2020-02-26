@@ -107,11 +107,11 @@ def main_builder():
                                 'fw_gears', 'ldog_struct',
                                 'main_gear')     
         fw_download_command = '''
-        fw download "gkaguirrelab/canineFovea/atlas/Canine Atlas/invivoTemplate/files/invivoTemplate.nii.gz" -o %s -f;
-        fw download "gkaguirrelab/canineFovea/atlas/Canine Atlas/downsampled Atlas/files/2x2x2resampled_invivoTemplate.nii.gz" -o %s -f;
-        fw download "gkaguirrelab/canineFovea/atlas/Canine Atlas/exvivo template/files/Woofsurfer.zip" -o %s -f;
-        fw download "gkaguirrelab/canineFovea/atlas/Canine Atlas/invivo2exvivo warp calculations/files/exvivo_warp_files.zip" -o %s -f;
-        fw download "gkaguirrelab/canineFovea/atlas/Canine Atlas/invivoTemplate-WithSkull/files/invivoTemplate-WithSkull.nii.gz" -o %s -f;        
+        GODEBUG=netdns=go fw download "gkaguirrelab/canineFovea/atlas/Canine Atlas/invivoTemplate/files/invivoTemplate.nii.gz" -o %s -f;
+        GODEBUG=netdns=go fw download "gkaguirrelab/canineFovea/atlas/Canine Atlas/downsampled Atlas/files/2x2x2resampled_invivoTemplate.nii.gz" -o %s -f;
+        GODEBUG=netdns=go fw download "gkaguirrelab/canineFovea/atlas/Canine Atlas/exvivo template/files/Woofsurfer.zip" -o %s -f;
+        GODEBUG=netdns=go fw download "gkaguirrelab/canineFovea/atlas/Canine Atlas/invivo2exvivo warp calculations/files/exvivo_warp_files.zip" -o %s -f;
+        GODEBUG=netdns=go fw download "gkaguirrelab/canineFovea/atlas/Canine Atlas/invivoTemplate-WithSkull/files/invivoTemplate-WithSkull.nii.gz" -o %s -f;        
         ''' % (os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis', 'fw_gears', 'ldog_struct', 'ldog_struct_frame', 'invivoTemplate.nii.gz'),
                os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis', 'fw_gears', 'ldog_struct', 'ldog_struct_frame', '2x2x2resampled_invivoTemplate.nii.gz'),
                os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis', 'fw_gears', 'ldog_struct', 'ldog_struct_frame', 'Woofsurfer.zip'),
@@ -216,13 +216,13 @@ def main_builder():
             which_forward = input(bcolors.WARNING + 'Which forwardmodel do you want to test? v for volumetric, c for cifti: v/c' + bcolors.ENDC) 
             print('Starting forwardmodel gear')
             if which_forward == 'v':
-                tester = ('cd %s; fw gear local --averageAcquisitions 1 --dataFileType volumetric --dataSourceType ldogfix'
+                tester = ('cd %s; GODEBUG=netdns=go fw gear local --averageAcquisitions 1 --dataFileType volumetric --dataSourceType ldogfix'
                           ' --funcZip01 /home/gear-builder/Desktop/gear_test_files/forward_model/volumetric/lefteye.zip'
                           ' --modelClass flobsHRF --modelOpts \'(polyDeg), 13\' --tr 3'
                           ' --stimFile /home/gear-builder/Desktop/gear_test_files/forward_model/volumetric/lightFluxFlicker_1x112_On\=0.mat'
                           ' --structZip /home/gear-builder/Desktop/gear_test_files/forward_model/volumetric/M662_preprocessedStruct.zip' % mainfold)
             elif which_forward == 'c':
-                tester = ('cd %s; fw gear local --averageAcquisitions 1 --dataFileType cifti --dataSourceType icafix'
+                tester = ('cd %s; GODEBUG=netdns=go fw gear local --averageAcquisitions 1 --dataFileType cifti --dataSourceType icafix'
                           ' --funcZip01 /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/icafix.zip'
                           ' --modelClass prfTimeShift --modelOpts \'(pixelsPerDegree),5.1751,(polyDeg),5,(screenMagnification),1.00,(hrfParams),[0.7476,-0.7178,-0.3492]\' --tr 0.8'
                           ' --stimFile /home/gear-builder/Desktop/gear_test_files/forward_model/cifti/pRFStimulus_108x108x420.mat'
@@ -231,24 +231,24 @@ def main_builder():
                 print('Unknown option entered, not testing')
         elif gear_name == 'ldogfix':
             print('Starting ldogfix gear')
-            tester = ('cd %s; fw gear local --EPI_01 /home/gear-builder/Desktop/gear_test_files/ldog_fix/M662_left1_preprocessedFunc.zip'
+            tester = ('cd %s; GODEBUG=netdns=go fw gear local --EPI_01 /home/gear-builder/Desktop/gear_test_files/ldog_fix/M662_left1_preprocessedFunc.zip'
                       ' --EPI_02 /home/gear-builder/Desktop/gear_test_files/ldog_fix/M662_left2_preprocessedFunc.zip'
                       ' --stimFile /home/gear-builder/Desktop/gear_test_files/ldog_fix/lightFluxFlicker_1x112_On=0.mat'
                       ' --archiveName testArchive --smoothingSigma 2' % mainfold)
         elif gear_name == 'ldogstruct':
             print('Starting ldogstruct gear')
-            tester = ('cd %s; fw gear local --MPRAGE_01 /home/gear-builder/Desktop/gear_test_files/ldog_struct/rage1.nii.gz'
+            tester = ('cd %s; GODEBUG=netdns=go fw gear local --MPRAGE_01 /home/gear-builder/Desktop/gear_test_files/ldog_struct/rage1.nii.gz'
                       ' --MPRAGE_02 /home/gear-builder/Desktop/gear_test_files/ldog_struct/rage2.nii.gz'
                       ' --centreOfGravityX 91 --centreOfGravityY 42 --centreOfGravityZ 95 --numberOfThreads 6 --subjectId M662_test' % mainfold)
         elif gear_name == 'ldogfunc':
             print('Starting ldogfunc gear')
-            tester = ('cd %s; fw gear local --StructZip /home/gear-builder/Desktop/gear_test_files/ldof_func/M662_preprocessedStruct.zip'
+            tester = ('cd %s; GODEBUG=netdns=go fw gear local --StructZip /home/gear-builder/Desktop/gear_test_files/ldof_func/M662_preprocessedStruct.zip'
                       ' --additionalWarpToTemplate True --fMRIScoutAP /home/gear-builder/Desktop/gear_test_files/ldof_func/AP.nii.gz'
                       ' --fMRIScoutPA /home/gear-builder/Desktop/gear_test_files/ldof_func/PA.nii.gz --fMRIName left1'
                       ' --fMRITimeSeries /home/gear-builder/Desktop/gear_test_files/ldof_func/left1.nii.gz' % mainfold)
         elif gear_name == 'bayesianfitting':
             print('Starting bayesianfitting gear')
-            tester = ('cd %s; fw gear local --nativeMgzMaps /home/ozzy/Desktop/gear_test_files/bayessianfitting/TOME_3046_maps_nativeMGZ.zip'
+            tester = ('cd %s; GODEBUG=netdns=go fw gear local --nativeMgzMaps /home/ozzy/Desktop/gear_test_files/bayessianfitting/TOME_3046_maps_nativeMGZ.zip'
                       ' --radius-weight 0.25 --scale 100 --structZip /home/ozzy/Desktop/gear_test_files/bayessianfitting/TOME_3046_hcpstruct.zip' % mainfold)    
         else:
             sys.exit('Gear not found')
