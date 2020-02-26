@@ -3,6 +3,7 @@ from compiler_functions import *
 import sys
 import json
 import pwd
+import fileinput
 
 '''
 This is an interaactive script which is used to assemble and update Flywheel
@@ -213,6 +214,10 @@ def main_builder():
     testcall = input(bcolors.WARNING + 'Do you want to test the gear? Only available for the gear builder computer. Output can be found in repo directory/main_gear/output : y/n ' + bcolors.ENDC)  
     if testcall == 'y':
         if gear_name == 'forwardmodel':
+            # Replace the flywheel flag in forwardmodel with zero so that the gear can be tested
+            with fileinput.FileInput(os.path.join(mainfold, 'run'), inplace=True) as file:
+                for line in file:
+                    print(line.replace("\'flywheelFlag\' \'1\'", "\'flywheelFlag\' \'0\'"), end='')
             which_forward = input(bcolors.WARNING + 'Which forwardmodel do you want to test? v for volumetric, c for cifti: v/c' + bcolors.ENDC) 
             print('Starting forwardmodel gear')
             if which_forward == 'v':
@@ -256,6 +261,11 @@ def main_builder():
         # Run the tester string
         print('RUNNING: %s' % tester)
         os.system(tester)
+        # Fix back the flywheel flag in forwardmodel before upload
+        if gear_name == 'forwardmodel':
+            with fileinput.FileInput(os.path.join(mainfold, 'run'), inplace=True) as file:
+                for line in file:
+                    print(line.replace("\'flywheelFlag\' \'0\'", "\'flywheelFlag\' \'1\'"), end='')
     else:
         print("Not testing the gear")
         
