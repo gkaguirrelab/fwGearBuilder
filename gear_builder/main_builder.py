@@ -255,14 +255,15 @@ def main_builder():
             print('Starting bayesianfitting gear')
             tester = ('cd %s; GODEBUG=netdns=go fw gear local --nativeMgzMaps /home/ozzy/Desktop/gear_test_files/bayessianfitting/TOME_3046_maps_nativeMGZ.zip'
                       ' --radius-weight 0.25 --scale 100 --structZip /home/ozzy/Desktop/gear_test_files/bayessianfitting/TOME_3046_hcpstruct.zip' % mainfold)    
-        if os.path.exists(mainfold):
-            os.system('xdg-open \'%s\'' % mainfold)
         else:
             sys.exit('Gear not found')
         
         # Run the tester string
         print('RUNNING: %s' % tester)
         os.system(tester)
+        # Open the output folder when the test is done
+        if os.path.exists(mainfold):
+            os.system('xdg-open \'%s\'' % os.path.join(mainfold, 'output'))
         # Fix back the flywheel flag in forwardmodel before upload
         if gear_name == 'forwardmodel':
             with fileinput.FileInput(os.path.join(mainfold, 'run'), inplace=True) as file:
