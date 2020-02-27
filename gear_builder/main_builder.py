@@ -211,7 +211,7 @@ def main_builder():
         json.dump(data, f, indent=4)
         f.truncate()
 
-    testcall = input(bcolors.WARNING + 'Do you want to test the gear? Only available for the gear builder computer. Output can be found in repo directory/main_gear/output : y/n ' + bcolors.ENDC)  
+    testcall = input(bcolors.WARNING + 'Do you want to test the gear? Only available for the gear builder computer. Output folder will be automatically opened when the test is done : y/n ' + bcolors.ENDC)  
     if testcall == 'y':
         if gear_name == 'forwardmodel':
             # Replace the flywheel flag in forwardmodel with zero so that the gear can be tested
@@ -255,6 +255,8 @@ def main_builder():
             print('Starting bayesianfitting gear')
             tester = ('cd %s; GODEBUG=netdns=go fw gear local --nativeMgzMaps /home/ozzy/Desktop/gear_test_files/bayessianfitting/TOME_3046_maps_nativeMGZ.zip'
                       ' --radius-weight 0.25 --scale 100 --structZip /home/ozzy/Desktop/gear_test_files/bayessianfitting/TOME_3046_hcpstruct.zip' % mainfold)    
+        if os.path.exists(mainfold):
+            os.system('xdg-open \'%s\'' % mainfold)
         else:
             sys.exit('Gear not found')
         
