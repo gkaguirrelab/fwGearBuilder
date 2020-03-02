@@ -3,9 +3,9 @@ Code to assemble gears for use on the Flywheel platform
 
 # Instructions
 
-1 - Connect to the gear builder computer using TeamViewer.
-2 - cd into "/home/gear-builder/Documents/MATLAB/projects/fwGearBuilder/gear_builder"
-3 - run "python main_builder"
+1 - Connect to the gear builder computer using TeamViewer.  
+2 - cd into "/home/gear-builder/Documents/MATLAB/projects/fwGearBuilder/gear_builder".  
+3 - run "python main_builder".  
 4 - Follow the instructions to update/rebuild gears.
 
 # Scripts inside the repo
