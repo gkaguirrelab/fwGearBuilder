@@ -3,9 +3,9 @@
   "path_to_the_frame_folder": "/frames",
   "path_to_the_mainfolder": "/mainf_fdol",
   "path_to_the_gear_manifest_json_file_in_gear_frame": "/Users/ozzy/Documents/MATLAB/projects/mriLDOGAnalysis/fw_gears/ldog_func/ldog_func_frame/manifest.json",
-  "name_of_the_matlab_script(s)_you_want_to_compile(without_the_extension)": "name1, name2, name3",
-  "path_to_the_matlab_script(s)_you_want_to_compile" : "/home/ozzy/script1, /home/ozzy/script2, /home/ozzy/script3",
-  "path_to_the_secondary_function(s)_that_is_used_by_the_compiled_script(s)": "/home/11, /home/12, /home/13; /home/21, /home/22, /home/23; /home/31 ,/home/32 ,/home/33 ",
-  "path_to_the_secondary_function_folder(s)_that_is_used_by_the_compiled_script(s)": "/home/11fold, /home/12fold; /home/21fold ,/home/22fold; /home/31, /home/32",
+  "name_of_the_matlab_script(s)_you_want_to_compile(without_the_extension)": "name1,name2,name3",
+  "path_to_the_matlab_script(s)_you_want_to_compile" : "/home/ozzy/script1,/home/ozzy/script2,/home/ozzy/script3",
+  "path_to_the_secondary_function(s)_that_is_used_by_the_compiled_script(s)": "/home/11,/home/12,/home/13;/home/21,/home/22,/home/23;/home/31,/home/32,/home/33 ",
+  "path_to_the_secondary_function_folder(s)_that_is_used_by_the_compiled_script(s)": "/home/11fold,/home/12fold;/home/21fold,/home/22fold;/home/31fold,/home/32fold",
   "gear_test_command(optional)": ""
 }

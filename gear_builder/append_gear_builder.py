@@ -23,19 +23,21 @@ def append_gear_builder(path_to_matlab, new_gear_json):
     script_name_all =  data['name_of_the_matlab_script(s)_you_want_to_compile(without_the_extension)'].split(',')
     script_path_all = data['path_to_the_matlab_script(s)_you_want_to_compile'].split(',')   
     secondary_functions_all_all = data['path_to_the_secondary_function(s)_that_is_used_by_the_compiled_script(s)'].split(';')
-    secondary_folders_all_all = data =['path_to_the_secondary_function_folder(s)_that_is_used_by_the_compiled_script(s)']
-    script_length = len(script_name_all)
+    secondary_folders_all_all = data['path_to_the_secondary_function_folder(s)_that_is_used_by_the_compiled_script(s)'].split(';')
+    script_length = len(script_name_all)    
+    
     for i in range(script_length):
         script_name = script_name_all[i]
         script_path = script_path_all[i]
         secondary_functions_all = secondary_functions_all_all[i].split(',') # All functions list no need to separate as there is one script
-        secondary_folders_all = secondary_folders_all_all[i].split(',') # All folders list
-        frame_function_string_draft = "\ndef compile_{script_path}(path_to_matlab_documents, output_folder):\n\n    if not os.path.exists(output_folder):\n    os.system('mkdir %s'%output_folder)\n\n    mcc_path = 'mcc'\n    mcc_call{new_gear_number} = '%s -m -R -nodisplay %s".format(script_path=script_path, new_gear_number=new_gear_number)
+        secondary_folders_all = secondary_folders_all_all[i].split(',') # All folders list       
+        
+        frame_function_string_draft = "\ndef compile_{script_name}(path_to_matlab_documents, output_folder):\n\n    if not os.path.exists(output_folder):\n        os.system('mkdir %s'%output_folder)\n\n    mcc_path = 'mcc'\n    mcc_call = '%s -m -R -nodisplay {script_path}".format(script_name=script_name, new_gear_number=new_gear_number, script_path=script_path)
         for i in secondary_functions_all:
             frame_function_string_draft = frame_function_string_draft + ' -a {function}'.format(function=i)
         for i in secondary_folders_all:
             frame_function_string_draft = frame_function_string_draft + ' -I {folders}'.format(folders=i)
-        frame_function_string = frame_function_string_draft  + ' -d %s -v\' % output_folder' + '\nCompiling {script_name}'.format(script_name=script_name) + '\nos.system(mcc_call)'
+        frame_function_string = frame_function_string_draft  + ' -d %s -v\' % (mcc_path, output_folder)' + '\n    print(\'Compiling_{script_name}\')'.format(script_name=script_name) + '\n    os.system(mcc_call)\n'
         file_object = open(os.path.join(path_to_matlab, 'projects/fwGearBuilder/gear_builder/compiler_functions.py'), 'a')
         file_object.write(frame_function_string)
         file_object.close()
