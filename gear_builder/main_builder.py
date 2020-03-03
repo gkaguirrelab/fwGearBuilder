@@ -54,7 +54,7 @@ def main_builder():
         startuptwo = '/home/%s/matlab/' % pwd.getpwuid(os.getuid()).pw_name
         if os.path.exists(startuptwo):        
             if os.listdir(startuptwo) != []:
-                os.system('mv %s/startup.m %s/nastartup.m' % (startuptwo, startuptwo)   
+                os.system('mv %s/startup.m %s/nastartup.m' % (startuptwo, startuptwo))   
     else:
         sys.exit('Stopping the builder')
 
