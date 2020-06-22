@@ -38,7 +38,7 @@ def compile_forwardModel(path_to_matlab_documents, output_folder):
     os.path.join(path_to_matlab_documents,'projects/forwardModelWrapper/code/handleInputs.m'),
     os.path.join(path_to_matlab_documents,'projects/forwardModelWrapper/code/bayesPRF/renderInferredMaps.m'),
     os.path.join(path_to_matlab_documents,'toolboxes/forwardModel/'),
-    os.path.join(path_to_matlab_documents,'toolboxes/HCPpipelines/global/matlab/'),
+    os.path.join(path_to_matlab_documents,'toolboxes/ciftiMatlab'),
     os.path.join(path_to_matlab_documents,'projects/forwardModelWrapper/code/utilities/'),    
     os.path.join(path_to_matlab_documents,'toolboxes/freesurferMatlab/matlab/'),
     os.path.join(path_to_matlab_documents,'toolboxes/progressBar/'),
