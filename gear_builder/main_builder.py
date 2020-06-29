@@ -55,7 +55,7 @@ def main_builder():
 
 ####################### Compile the required functions ########################        
   
-    which_number = input(bcolors.WARNING + '\nWhich gear would you like to update ? Enter a number:\n1-forwardmodel\n2-bayesianfitting\n3-ldogstruct\n4-ldogfunc\n5-ldogfix\nEnter a number:' + bcolors.ENDC)
+    which_number = input(bcolors.WARNING + '\nWhich gear would you like to update ? Enter a number:\n1-forwardmodel\n2-bayesianfitting\n3-ldogstruct\n4-ldogfunc\n5-ldogfix\n6-vol2surf\n7-regressLocalWhiteMatter\nEnter a number:' + bcolors.ENDC)
     if which_number == '1':
         gear_name = 'forwardmodel'
         print('Pulling the git repos')
