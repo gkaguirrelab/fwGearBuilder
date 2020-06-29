@@ -1,8 +1,8 @@
 import os 
 
 '''
-This script contains the functions which compile matlab code for the forwardModel
-and ldog projects. These functions are imported by the main_builder.py
+This script contains the functions which compile matlab code for various 
+projects. These functions here are called by the main_builder.py
 '''
 
 def compile_calcCorticalMag(path_to_matlab_documents, output_folder):
@@ -94,3 +94,35 @@ def compile_regressMotion(path_to_matlab_documents, output_folder):
     
     print('Compiling regressMotion.m')
     os.system(mcc_call5)
+
+def compile_localWM(path_to_matlab_documents, output_folder):
+
+    # Create the output folder if doesn't exist
+    if not os.path.exists(output_folder):
+        os.system("mkdir %s"%output_folder)
+    
+    #mcc_path = '/usr/local/MATLAB/R2018b/bin/mcc'
+    mcc_path = 'mcc'
+    mcc_call6 = '%s -m -R -nodisplay %s -I %s -I %s -d %s -v'%(mcc_path, os.path.join(path_to_matlab_documents,'projects/localWhiteMatterNoiseRegression/code/remove_localWM_FwVersion.m'),  
+                                                               os.path.join(path_to_matlab_documents,'toolboxes/freesurferMatlab/matlab/'),
+                                                               os.path.join(path_to_matlab_documents,'toolboxes/flywheelMRSupport/code/'),
+                                                               output_folder)
+    
+    print('Compiling remove_localWM_FwVersion.m')
+    os.system(mcc_call6)
+    
+def compile_psdFunc(path_to_matlab_documents, output_folder):
+
+    # Create the output folder if doesn't exist
+    if not os.path.exists(output_folder):
+        os.system("mkdir %s"%output_folder)
+    
+    #mcc_path = '/usr/local/MATLAB/R2018b/bin/mcc'
+    mcc_path = 'mcc'
+    mcc_call7 = '%s -m -R -nodisplay %s -I %s -I %s -d %s -v'%(mcc_path, os.path.join(path_to_matlab_documents,'projects/localWhiteMatterNoiseRegression/code/calcOneSidedPSD.m'),  
+                                                               os.path.join(path_to_matlab_documents,'toolboxes/freesurferMatlab/matlab/'),
+                                                               os.path.join(path_to_matlab_documents,'toolboxes/flywheelMRSupport/code/'),
+                                                               output_folder)
+    
+    print('Compiling calcOneSidedPSD.m')
+    os.system(mcc_call7)

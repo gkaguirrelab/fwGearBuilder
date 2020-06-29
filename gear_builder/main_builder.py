@@ -38,11 +38,6 @@ def main_builder():
     # Pull the latest version 
     print('Pulling the latest version of the gear builder from Git')
     os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'fwGearBuilder'))
-
-    print('Pulling the git repos')
-    os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModelWrapper'))
-    os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModel'))    
-    os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis'))
       
     print('Running tbUSe')
     os.system('cd %s; matlab -r -nodisplay \'gearBuilderAutotbUse\(\);\'' % os.path.join(path_to_matlab_doc, 'projects', 'fwGearBuilder','gear_builder'))
@@ -63,6 +58,9 @@ def main_builder():
     which_number = input(bcolors.WARNING + '\nWhich gear would you like to update ? Enter a number:\n1-forwardmodel\n2-bayesianfitting\n3-ldogstruct\n4-ldogfunc\n5-ldogfix\nEnter a number:' + bcolors.ENDC)
     if which_number == '1':
         gear_name = 'forwardmodel'
+        print('Pulling the git repos')
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModelWrapper'))
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModel'))            
         gear_version = input(bcolors.WARNING + 'What will be the new gear version:' + bcolors.ENDC)
         print('starting forwardmodel building')
         frame = os.path.join(path_to_matlab_doc, 'projects', 
@@ -77,7 +75,10 @@ def main_builder():
                                 'fw_gears', 'forwardModel',
                                 'main_gear')
     elif which_number == '2':
-        gear_name = 'bayesianfitting'        
+        gear_name = 'bayesianfitting'  
+        print('Pulling the git repos')
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModelWrapper'))
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'forwardModel'))       
         gear_version = input(bcolors.WARNING + 'What will be the new gear version:' + bcolors.ENDC)
         frame = os.path.join(path_to_matlab_doc, 'projects', 
                              'forwardMtheodelWrapper', 
@@ -98,6 +99,8 @@ def main_builder():
                                 'main_gear')   
     elif which_number == '3':
         gear_name = 'ldogstruct'
+        print('Pulling the git repos')
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis'))        
         gear_version = input(bcolors.WARNING + 'What will be the new gear version:' + bcolors.ENDC)
         frame = os.path.join(path_to_matlab_doc, 'projects', 
                              'mriLDOGAnalysis', 
@@ -123,6 +126,8 @@ def main_builder():
         
     elif which_number == '4':
         gear_name = 'ldogfunc'
+        print('Pulling the git repos')
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis'))  
         gear_version = input(bcolors.WARNING + 'What will be the new gear version:' + bcolors.ENDC)
         frame = os.path.join(path_to_matlab_doc, 'projects', 
                              'mriLDOGAnalysis', 
@@ -134,6 +139,8 @@ def main_builder():
                                 'main_gear')     
     elif which_number == '5':
         gear_name = 'ldogfix'
+        print('Pulling the git repos')
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis'))  
         gear_version = input(bcolors.WARNING + 'What will be the new gear version:' + bcolors.ENDC)
         frame = os.path.join(path_to_matlab_doc, 'projects', 
                              'mriLDOGAnalysis', 
@@ -146,6 +153,31 @@ def main_builder():
                                 'mriLDOGAnalysis', 
                                 'fw_gears', 'ldog_fix',
                                 'main_gear')          
+    elif which_number == '6':
+        gear_name = 'vol2surf'
+        print('Pulling the git repos')
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'MRISurfaceMappingTools'))  
+        gear_version = input(bcolors.WARNING + 'What will be the new gear version:' + bcolors.ENDC)
+        frame = os.path.join(path_to_matlab_doc, 'projects', 
+                             'MRISurfaceMappingTools', 
+                             'fw_gears', 'vol2surf_frame') 
+        mainfold = frame         
+    elif which_number == '7':
+        gear_name = 'regressLocalWhiteMatter'
+        print('Pulling the git repos')
+        os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'localWhiteMatterNoiseRegression'))  
+        gear_version = input(bcolors.WARNING + 'What will be the new gear version:' + bcolors.ENDC)
+        frame = os.path.join(path_to_matlab_doc, 'projects', 
+                             'localWhiteMatterNoiseRegression', 
+                             'gear') 
+        localWM = os.path.join(frame, 'compiled_localWM')
+        psdFunc = os.path.join(frame, 'compiled_psdFunc')        
+        os.system('rm -r %s' % localWM)   
+        os.system('rm -r %s' % psdFunc)          
+        compile_localWM(path_to_matlab_doc, localWM)
+        compile_psdFunc(path_to_matlab_doc, psdFunc)        
+        mainfold = frame   
+          
     else:
         sys.exit("Invalid number entered or the gear is not yet supported.")
         
@@ -159,8 +191,9 @@ def main_builder():
                                                                gear_name,
                                                                gear_version))        
     # Delete the content of the main_gear folder
-    if os.listdir(mainfold) != []:
-        os.system('cd %s; rm *' % mainfold)
+    if not gear_name == 'vol2surf' and not gear_name == 'regressLocalWhiteMatter':
+        if os.listdir(mainfold) != []:
+            os.system('cd %s; rm *' % mainfold)
 
     if gear_name == 'forwardmodel':
         print('\n')
@@ -187,6 +220,16 @@ def main_builder():
         print(bcolors.WARNING + '-- When asked to chose a human readable name use the following without the quotation marks:  "ldogFix: archiving ldogfunc outputs"' + bcolors.ENDC)
         print('\n')
         print(bcolors.WARNING + '-- When asked for a gear ID enter the following without the quotation marks:  "ldogfix"' + bcolors.ENDC)    
+    elif gear_name == 'vol2surf':
+        print('\n')
+        print(bcolors.WARNING + '-- When asked to chose a human readable name use the following without the quotation marks:  "vol2surf: Map volumetric MRI images to fsaverage and FSLR surfaces"' + bcolors.ENDC)
+        print('\n')
+        print(bcolors.WARNING + '-- When asked for a gear ID enter the following without the quotation marks:  "vol2surf"' + bcolors.ENDC)       
+    elif gear_name == 'regressLocalWhiteMatter':
+        print('\n')
+        print(bcolors.WARNING + '-- When asked to chose a human readable name use the following without the quotation marks:  "regressLocalWhiteMatter: Removes white matter noise from adjacent gray matter voxels"' + bcolors.ENDC)
+        print('\n')
+        print(bcolors.WARNING + '-- When asked for a gear ID enter the following without the quotation marks:  "localwhitematternoiseregression"' + bcolors.ENDC)
     else:
         print('Unknown gear')        
                 
@@ -255,6 +298,10 @@ def main_builder():
             print('Starting bayesianfitting gear')
             tester = ('cd %s; GODEBUG=netdns=go fw gear local --nativeMgzMaps /home/ozzy/Desktop/gear_test_files/bayessianfitting/TOME_3046_maps_nativeMGZ.zip'
                       ' --radius-weight 0.25 --scale 100 --structZip /home/ozzy/Desktop/gear_test_files/bayessianfitting/TOME_3046_hcpstruct.zip' % mainfold)    
+        elif gear_name == 'vol2surf':
+            print('vol2surf test is not implemented yet')
+        elif gear_name == 'regressLocalWhiteMatter':
+            print('regressLocalWhiteMatter test is not implemented yet')            
         else:
             sys.exit('Gear not found')
         
@@ -279,7 +326,7 @@ def main_builder():
         print("Not uploading")
 
     if which_number == '3':
-        delete_call = input(bcolors.WARNING + 'The files downloaded from Flywheel into ldgog_struct_frame will be deleted now. Do you want to continue : y/n ' + bcolors.ENDC)
+        delete_call = input(bcolors.WARNING + 'The files downloaded from Flywheel into ldog_struct_frame will be deleted now. Do you want to continue : y/n ' + bcolors.ENDC)
         if delete_call == 'y':
             frame_path = os.path.join(path_to_matlab_doc, 'projects', 'mriLDOGAnalysis', 'fw_gears', 'ldog_struct', 'ldog_struct_frame')
             os.system('cd %s; rm *.zip *.gz' % frame_path)
