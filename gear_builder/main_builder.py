@@ -191,7 +191,7 @@ def main_builder():
                                                                gear_name,
                                                                gear_version))        
     # Delete the content of the main_gear folder
-    if not gear_name == 'vol2surf' and not gear_name == 'regressLocalWhiteMatter':
+    if not gear_name == 'vol2surf' or not gear_name == 'regressLocalWhiteMatter':
         if os.listdir(mainfold) != []:
             os.system('cd %s; rm *' % mainfold)
 
