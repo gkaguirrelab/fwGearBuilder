@@ -119,10 +119,11 @@ def compile_psdFunc(path_to_matlab_documents, output_folder):
     
     #mcc_path = '/usr/local/MATLAB/R2018b/bin/mcc'
     mcc_path = 'mcc'
-    mcc_call7 = '%s -m -R -nodisplay %s -I %s -I %s -d %s -v'%(mcc_path, os.path.join(path_to_matlab_documents,'projects/localWhiteMatterNoiseRegression/code/calcOneSidedPSD.m'),  
-                                                               os.path.join(path_to_matlab_documents,'toolboxes/freesurferMatlab/matlab/'),
-                                                               os.path.join(path_to_matlab_documents,'toolboxes/flywheelMRSupport/code/'),
-                                                               output_folder)
+    mcc_call7 = '%s -m -R -nodisplay %s -I %s -I %s -a %s -d %s -v'%(mcc_path, os.path.join(path_to_matlab_documents,'projects/localWhiteMatterNoiseRegression/code/calcOneSidedPSD_FwVersion.m'),  
+                                                                     os.path.join(path_to_matlab_documents,'toolboxes/freesurferMatlab/matlab/'),
+                                                                     os.path.join(path_to_matlab_documents,'toolboxes/flywheelMRSupport/code/'),
+                                                                     os.path.join(path_to_matlab_documents,'projects/forwardModel/code/utilities/calcOneSidedPSD.m'),
+                                                                     output_folder)
     
     print('Compiling calcOneSidedPSD.m')
     os.system(mcc_call7)
