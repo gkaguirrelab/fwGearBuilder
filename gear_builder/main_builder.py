@@ -163,7 +163,7 @@ def main_builder():
                              'fw_gears', 'vol2surf_frame') 
         mainfold = frame         
     elif which_number == '7':
-        gear_name = 'regressLocalWhiteMatter'
+        gear_name = 'regresslocalwhitematter'
         print('Pulling the git repos')
         os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'localWhiteMatterNoiseRegression'))  
         gear_version = input(bcolors.WARNING + 'What will be the new gear version:' + bcolors.ENDC)
