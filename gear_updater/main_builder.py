@@ -39,8 +39,8 @@ def main_builder():
     print('Pulling the latest version of the gear builder from Git')
     os.system('cd %s; git pull' % os.path.join(path_to_matlab_doc, 'projects', 'fwGearBuilder'))
       
-    print('Running tbUSe')
-    os.system('cd %s; matlab -r -nodisplay \'gearBuilderAutotbUse\(\);\'' % os.path.join(path_to_matlab_doc, 'projects', 'fwGearBuilder','gear_builder'))
+ #   print('Running tbUSe')
+ #   os.system('cd %s; matlab -r -nodisplay \'gearBuilderAutotbUse\(\);\'' % os.path.join(path_to_matlab_doc, 'projects', 'fwGearBuilder','gear_builder'))
     
     cont = input(bcolors.WARNING + '\nWarning! This script temporarily renames your matlab startup file to nostartup.m for compiling. The script discards this change when the compiling process is done. Do you want to continue ? y/n ' + bcolors.ENDC)
     if cont == 'y':
