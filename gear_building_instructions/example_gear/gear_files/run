@@ -30,7 +30,7 @@ with open(config_path) as config_file:
     job_config = json.load(config_file)
 config = job_config['config']
 
-# Parsing each config option 
+# Parsing each config option one by one 
 vectorToAdd = config['vectorToAdd']
 scaleBy = config['scaleBy']
 transpose = config['transpose']

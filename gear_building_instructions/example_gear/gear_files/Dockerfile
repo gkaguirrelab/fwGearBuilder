@@ -6,25 +6,25 @@
 # You can base your docker image on that.   
 FROM ubuntu:latest
 
-# This is not very important for Flyhweel purposes so you might as well delete it.
+# This is not important for Flyhweel purposes. Just a maintainer name if you want to store your docker image online on dockerhub.
 MAINTAINER YourName(yourEmail@gmail.com)
 
-# Here we create a flywheel environment. Flywheel saves input and output into flywheel/v0. This is where the webpage looks for the input 
-# and the output. You can keep these the same for all gears you make.
+# Here we create a flywheel environment. Flywheel saves input and output into flywheel/v0 in the docker container. This is where the webpage looks for the input 
+# and saves the output. You can keep these the same for all gears you make.
 ENV FLYWHEEL /flywheel/v0/
 RUN mkdir -p ${FLYWHEEL}
 
-# Here we tell the DockerFile to copy "manifest.json" and "run" files to the Flyhweel directory when we make the Docker image. 
+# Here we tell the DockerFile to copy "manifest.json" and "run" files to the Flyhweel directory in the container when we make it. We haven't created these files yet in the instructions, but we will
 COPY manifest.json run ${FLYWHEEL}
 
 # Giving execute privilage to the run script
 RUN chmod +x /flywheel/v0/run
 
-# Here we tell the DockerFile to copy the folder that contains our MATLAB compiled code from the current directory of your computer to /opt directory in the Docker image. 
-# Do not forget where you copy stuff in the docker image because we will reference some of them in the run file the gear needs. 
+# Here we tell the DockerFile to copy the folder that contains our MATLAB compiled code from the current directory of your computer to /opt directory in the Docker container. 
+# We have already created this folder in the instructions. If you saved your compiled code to a folder which is not called compiled_function, change the name below.
 COPY compiled_function/ /opt/compiled_function 
 
-# Giving execute privilage to every file in compiled MATLAB directory
+# Giving execute privilages to every file in compiled MATLAB directory. Change the name if you use a folder with different name.
 RUN chmod +x /opt/compiled_function/*  
 
 # Here we tell DockerFile to update the packages and install some essential libraries as well as zip and unzip, python2, and wget.
@@ -37,12 +37,12 @@ RUN apt-get update \
     python
 
 # Download and install MATLAB Runtime with wget. The version here could be old. It has to match the matlab version you compiled your code with.
-# So go to https://www.mathworks.com/products/compiler/matlab-runtime.html, and copy the link to the Linux zip file of the matching version and replace the one below.
+# So go to https://www.mathworks.com/products/compiler/matlab-runtime.html, and copy the link to the Linux download file of your version and replace the one below.
 RUN wget https://ssd.mathworks.com/supportfiles/downloads/R2020a/Release/5/deployment_files/installer/complete/glnxa64/MATLAB_Runtime_R2020a_Update_5_glnxa64.zip
 RUN mkdir matlabins
 RUN unzip MATLAB_Runtime_R2020a_Update_5_glnxa64.zip -d /matlabins/
 RUN /matlabins/install -mode silent -agreeToLicense yes
 
-# Here we set entrypoint to the DockerFile, so that when it is started, it will start the "run" script we copied automatically.
+# Here we set entrypoint to the DockerFile, so that when it is run, it will right away execute the "run" script that we will create.
 # Don't forget this. Otherwise, the gear doesn't start!!
 ENTRYPOINT /flywheel/v0/run
