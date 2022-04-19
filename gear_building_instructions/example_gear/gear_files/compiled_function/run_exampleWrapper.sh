@@ -27,7 +27,7 @@ else
       args="${args} \"${token}\"" 
       shift
   done
-  eval "\"${exe_dir}/regressMotion\"" $args
+  eval "\"${exe_dir}/exampleWrapper\"" $args
 fi
 exit
 

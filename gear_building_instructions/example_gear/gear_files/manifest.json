@@ -1,0 +1,46 @@
+{
+	"name": "examplegear",
+	"label": "exampleGear: Gear example",
+	"description": "Example gear that shows how gears are made",
+	"version": "0.1.0",
+	"inputs": {
+		"vectorTextFile": {
+			"base": "file",
+			"description": "This is a vector text file",
+			"optional": true,
+			"type": {
+				"enum": [
+					"text"
+				]
+			}
+		}
+	},
+	"config": {
+		"scaleBy": {
+			"default": "1",
+			"description": "We scale by this value",
+			"type": "string"
+		},
+		"transpose": {
+			"default": "false",
+			"description": "Transpose the output vector",
+			"type": "string"
+		},
+		"vectorToAdd": {
+			"default": "[0,0,0,0,0]",
+			"description": "Vector we add to the input vector",
+			"type": "string"
+		}
+	},
+	"author": "Ozenc Taskin",
+	"maintainer": "Ozenc Taskin",
+	"license": "Other",
+	"source": "https://github.com/example/example/fw_gears",
+	"url": "https://github.com/example/example",
+	"custom": {
+		"gear-builder": {
+			"category": "analysis",
+			"image": "test:latest"
+		}
+	}
+}

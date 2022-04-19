@@ -1,0 +1,45 @@
+#!/usr/bin/python
+
+# Import everything package you need here. We just need os and json for a matlab gear.
+import os 
+import json
+
+###################### Define the Paths and parameters ###########################
+
+# Here we are setting paths to flywheel base. Read the comments for each to understand what a gear is doing when it's run.
+
+flywheel_base ='/flywheel/v0/'                               # In this location the gear will create 2 folders when it is run, one called input and one called output
+manifest_file = os.path.join(flywheel_base, 'manifest.json') # This is the path to the manifest file we copied in the Docker image
+input_folder = os.path.join(flywheel_base, 'input')          # We set path to input. Inside here the gear will create one folder for each of the inputs you specified on the manifest.json with the same input name you used.
+output_folder = os.path.join(flywheel_base, 'output')        # Here is the output folder. Everything you save here in this script will be the gear's output 
+config_path = os.path.join(flywheel_base, 'config.json')     # The gear also creates a config file based on manifest.json. It contains the config options that will be passed to the gear. We will parse those and direct them towards the compiled matlab code in this script.
+
+# Here we specify the path to the compiled matlab code we put in the Docker image and to MATLAB Runtime we installed.
+compiled_matlab_func = '/opt/compiled_function/run_exampleWrapper.sh'
+mcr_path = '/usr/local/MATLAB/MATLAB_Runtime/v98/'           # Change this if you installed a different version of runtime in Dockerfile or installed it in a different location. Note that this is the Runtime you installed into the Docker image not your computer.
+
+################### Get the input #########################################
+
+vectorTextFile_folder =  os.path.join(input_folder, 'vectorTextFile') # As mentioned above the gear creates another folder in the input folder with the name of each of your inputs. We only have one input
+input_file = os.path.join(vectorTextFile_folder, os.listdir(vectorTextFile_folder)[0]) # and then the gear places the input file you pass into these input directories. We get the input file here by finding the first (and only) file in vectorTextFile folder.
+
+################### Parse config ##############################################
+
+# We open the config.json that the gear creates and parse this to get the config options the user set when running the gear.
+with open(config_path) as config_file:
+    job_config = json.load(config_file)
+config = job_config['config']
+
+# Parsing each config option 
+vectorToAdd = config['vectorToAdd']
+scaleBy = config['scaleBy']
+transpose = config['transpose']
+
+################### Run MATLAB Algorithm ################################
+
+# Here we are specifying the name of the output file and then running the compiled code just like we ran it on our computer when we tested it. 
+# I am using and old python string formatting method to assemble the command as we only installed python2 in the Docker
+output_file = os.path.join(output_folder, 'outputText.txt')
+command_to_run = '%s %s %s %s %s' % (compiled_matlab_func, mcr_path, input_file, vectorToAdd, scaleBy, transpose, output_file)
+os.system(command_to_run)
+
