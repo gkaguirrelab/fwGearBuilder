@@ -52,23 +52,23 @@ Once you are done with all the steps below, your gear folder should look this ex
 
 4 – Next is the manifest.json file. This file decides the interface of our gear on the webpage (e.g. what will be the name of the gear, its inputs, and its config options.). Check out the example file and reorganize it to your needs. You can find the definition of some variables below. More options for different file type constraints and config styles can be found on the flywheel page: https://docs.flywheel.io/hc/en-us/articles/360037695713
 
--name: machine friendly name for your gear (required)
--label: human friendly name for your gear (required)
--description: description of your gear
--author: the name of the person who made the script you are running in the gear
--maintainer: your name and email address
--source: webpage to the gear files if you put them online somewhere
--url: webpage to the code you used if available online
--version: version of your gear. Can start with any number pattern (e.g. 0.1.0 or 0.1)
--custom: contains some useful stuff
--flywheel (subfield of custom): Flywheel related custom stuff
--suite (subfield of flywheel): Under which lab the gear will be located. If you don’t include this, the gear will be listed independently which is fine if you don’t have your own suite on Flywheel webpage.
--license: If you have a license for the software
--config: Contains all the config options that will be passed to your compiled MATLAB   function. Can give these any name as we are going to parse them in the run script anyways. But it is a good idea to match them to the config options you have on your matlab script to keep your sanity.
--default (subfield of config): Default config option must match the type
--description (subfield of config): Description of the config option
--type: type of the config option. Could be string, boolean, number. If you made your wrapper in a way that it only accepts strings and converts them to whatever type the main function needs as suggested, you can use all strings here
--inputs: Contains the inputs of the gear. Create as many inputs as you need for your compiled function. It has similar subfields that the config fields have such as description and type. Optional decides whether the input is optional. If not and you leave it empty when running the gear on the Flywheel webpage, the gear doesn’t let you run it.  
+-	name: machine friendly name for your gear (required)
+-	label: human friendly name for your gear (required)
+-	description: description of your gear
+-	author: the name of the person who made the script you are running in the gear
+-	maintainer: your name and email address
+-	source: webpage to the gear files if you put them online somewhere
+-	url: webpage to the code you used if available online
+-	version: version of your gear. Can start with any number pattern (e.g. 0.1.0 or 0.1)
+-	custom: contains some useful stuff
+-	flywheel (subfield of custom): Flywheel related custom stuff
+-	suite (subfield of flywheel): Under which lab the gear will be located. If you don’t include this, the gear will be listed independently which is fine if you don’t have your own suite on Flywheel webpage.
+-	license: If you have a license for the software
+-	config: Contains all the config options that will be passed to your compiled MATLAB   function. Can give these any name as we are going to parse them in the run script anyways. But it is a good idea to match them to the config options you have on your matlab script to keep your sanity.
+-	default (subfield of config): Default config option must match the type
+-	description (subfield of config): Description of the config option
+-	type: type of the config option. Could be string, boolean, number. If you made your wrapper in a way that it only accepts strings and converts them to whatever type the main function needs as suggested, you can use all strings here
+-	inputs: Contains the inputs of the gear. Create as many inputs as you need for your compiled function. It has similar subfields that the config fields have such as description and type. Optional decides whether the input is optional. If not and you leave it empty when running the gear on the Flywheel webpage, the gear doesn’t let you run it.  
 
 5 - Finally check out the python run script. It has the comments for everything we need to do on there. Come back to the instructions when you have the Dockerfile, manifest.json, and run
 
