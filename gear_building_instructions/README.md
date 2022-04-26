@@ -19,24 +19,24 @@ We first need to compile our matlab function. When we run the compiled function 
 
 3 - Now we can compile the wrapper. If you use ToolboxToolbox, we need to disable it first as the startup options complicate the compiling process. Just go to your Documents/MATLAB folder and rename your startup.m to something else (e.g nostartup.m) until we finish compiling. Next call mcc from a bash terminal as following:
 
-mcc -m exampleWrapper.m -a exampleFunction.m -d <saveFolder>
+	"mcc -m exampleWrapper.m -a exampleFunction.m -d <saveFolder>"
 
 This will compile the your wrapper and save the output to a folder you specify with the -d option. If your function calls any sub functions, you need to add path to them with more -a flags. In our case, our main function is the only sub function of the wrapper. If you have multiple sub functions in a folder, the compiler can search for them automatically if you use the -I <path_to_folder> option. Warning: This folder search option does not descent into sub folders automatically. If you have your sub functions in nested folders, set path to each of them with multiple -I options.
 
 4 - Now we need to test the compiled code with MATLAB runtime to make sure it works. Here is how it is ran:
  
-‘<compiledBashFile>’  ‘<matlabRuntimeInstallationPath>’  ‘<input1>’  ‘<input2>’  ‘<input3>’ …
+	"‘<compiledBashFile>’  ‘<matlabRuntimeInstallationPath>’  ‘<input1>’  ‘<input2>’  ‘<input3>’ …"
 
 If you had two varargin options for example, say runSpeed and saveIntermediateFiles, in your script, here is how you would set those when you run the compiled code:
  
-‘<compiledBashFile>’  ‘<matlabRuntimeInstallationPath>’  ‘<input1>’  ‘<input2>’  ‘ runSpeed’  ‘fast’  ‘saveIntermediateFiles’  ‘true’
+	"‘<compiledBashFile>’  ‘<matlabRuntimeInstallationPath>’  ‘<input1>’  ‘<input2>’  ‘ runSpeed’  ‘fast’  ‘saveIntermediateFiles’  ‘true’"
 
 Note: This is how the matlabRuntimeInstallationPath looks like: '/usr/local/MATLAB/R2020a/MATLAB_Runtime/v98/'.
 Don’t forget to include the “v98” subfolder part in it (your version can be different though, e.g v97, v99).
 
 As an example, here is how we test the compiled exampleWrapper function:
 
-'/run_exampleWrapper.sh' '/usr/local/MATLAB/MATLAB_Runtime/v98/' '/exampletext.txt' '[1,1,1,1,1]' '2' 'true' '/home/outputText.txt'
+	"'/run_exampleWrapper.sh' '/usr/local/MATLAB/MATLAB_Runtime/v98/' '/exampletext.txt' '[1,1,1,1,1]' '2' 'true' '/home/outputText.txt'"
 
 This takes the vector in exampletext.txt, adds [1,1,1,1,1], scales by 2, transposes the vector, and saves it as outputText.txt to the home directory.
 
@@ -73,13 +73,13 @@ Once you are done with all the steps below, your gear folder should look this ex
 
 6 – Once you have everything ready, open up a terminal, cd into the gear folder and run the following:
 
-docker build -t <a-name-for-your-docker-image>:<a-version-num> .
+	"docker build -t <a-name-for-your-docker-image>:<a-version-num> ."
 
 This builds the docker image with the instructions on we set on Dockerfile. The name and the version number you need to give don’t matter much for the gear so name it anything. Don’t forget the dot at the end of the command. It tells the function to use the files in the current directory. This operation might take a bit.
 
 7  - Next, while still in the same directory, run:
 
-fw gear create
+	"fw gear create"
 
 It will ask you to give your gear a human readable name. You can name it anything, but the convention is something like:
 
@@ -89,7 +89,7 @@ Then it will ask you for a machine friendly name (e.g examplegear)
 
 Select Other as the base image NOT Docker. And type the name and the version of the Docker image you created at step 6 as
 
- <a-name-for-your-docker-image>:<a-version-num>
+ 	"<a-name-for-your-docker-image>:<a-version-num>"
 
 Select analysis for the next question and then type “yes” when it asks you whether you want to replace run and manifest files.
 
@@ -97,11 +97,11 @@ The gear is now created in the gear folder.
 
 8 – Now we need to test the gear before uploading. While in the gear folder on a terminal type:
 
-fw gear local --help
+	"fw gear local --help"
 
 This tells you how to run your gear locally. Here is how we would run the exampleWrapper gear we made:
 
-fw gear local --vectorTextFile=’exampletext.txt’ --vectorToAdd=’[1,1,1,1,1]’ --scaleBy=’2’ –transpose=’true’
+	"fw gear local --vectorTextFile=’exampletext.txt’ --vectorToAdd=’[1,1,1,1,1]’ --scaleBy=’2’ –transpose=’true’"
 
 Calling this command will run the gear and create input and output folders and config.json briefly in your gear folders. Input and config will disappear as soon as the gear complete, but the output folder will stay containing the output of your gear now. If you have everything you need in the output folder, then your gear is successful.
 
@@ -119,4 +119,4 @@ Calling this command will run the gear and create input and output folders and c
 
 10 – The gear is done! To upload it to the webpage, on a terminal window in the gear directory run:
 
-fw gear upload
+	"fw gear upload"
