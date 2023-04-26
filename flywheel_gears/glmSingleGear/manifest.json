@@ -1,0 +1,259 @@
+{
+	"name": "glmsingle",
+	"label": "glmSingle: single-trial estimates in fMRI time-series data",
+	"description": "This gear runs GLMsingle on functional MRI data. Source: https://github.com/cvnlab/GLMsingle.",
+	"version": "0.1.0",
+	"inputs": {
+		"design": {
+			"base": "file",
+			"description": "is the experimental design. There are two possible cases 1. A where A is a matrix with dimensions time x conditions. Each column should be zeros except for ones indicating condition onsets. 2. {A1 A2 A3 ... An} where each of the A's are like the previous case. The different A's correspond to different runs, and different runs can have different numbers of time points. However, all A's must have the same number of conditions.",
+			"optional": false
+		},
+		"extraregressors": {
+			"base": "file",
+			"description": "is time x regressors or a cell vector of elements that are each time x regressors. The dimensions of \u003cextraregressors\u003e should mirror that of \u003cdesign\u003e (i.e. same number of runs, same number of time points). The number of extra regressors does not have to be the same across runs, and each run can have zero or more extra regressors. If [] or not supplied, we do not use extra regressors in the model.",
+			"optional": true
+		},
+		"fracs": {
+			"base": "file",
+			"description": "is a vector of fractions that are greater than 0 and less than or equal to 1. We automatically sort in descending order and ensure the fractions are unique. These fractions indicate the regularization levels to evaluate using fractional ridge regression (fracridge) and cross-validation. Default: fliplr(.05:.05:1). A special case is when \u003cfracs\u003e is specified as a single scalar value. In this case, cross-validation is NOT performed for the type-D model, and we instead blindly use the supplied fractional value for the type-D model.",
+			"optional": true
+		},
+		"func01": {
+			"base": "file",
+			"description": "Raw fMRI data.",
+			"optional": false,
+			"type": {
+				"enum": [
+					"nifti"
+				]
+			}
+		},
+		"func02": {
+			"base": "file",
+			"description": "Raw fMRI data.",
+			"optional": true,
+			"type": {
+				"enum": [
+					"nifti"
+				]
+			}
+		},
+		"func03": {
+			"base": "file",
+			"description": "Raw fMRI data.",
+			"optional": true,
+			"type": {
+				"enum": [
+					"nifti"
+				]
+			}
+		},
+		"func04": {
+			"base": "file",
+			"description": "Raw fMRI data.",
+			"optional": true,
+			"type": {
+				"enum": [
+					"nifti"
+				]
+			}
+		},
+		"func05": {
+			"base": "file",
+			"description": "Raw fMRI data.",
+			"optional": true,
+			"type": {
+				"enum": [
+					"nifti"
+				]
+			}
+		},
+		"func06": {
+			"base": "file",
+			"description": "Raw fMRI data.",
+			"optional": true,
+			"type": {
+				"enum": [
+					"nifti"
+				]
+			}
+		},
+		"func07": {
+			"base": "file",
+			"description": "Raw fMRI data.",
+			"optional": true,
+			"type": {
+				"enum": [
+					"nifti"
+				]
+			}
+		},
+		"func08": {
+			"base": "file",
+			"description": "Raw fMRI data.",
+			"optional": true,
+			"type": {
+				"enum": [
+					"nifti"
+				]
+			}
+		},
+		"func09": {
+			"base": "file",
+			"description": "Raw fMRI data.",
+			"optional": true,
+			"type": {
+				"enum": [
+					"nifti"
+				]
+			}
+		},
+		"func10": {
+			"base": "file",
+			"description": "Raw fMRI data.",
+			"optional": true,
+			"type": {
+				"enum": [
+					"nifti"
+				]
+			}
+		},
+		"hrflibrary": {
+			"base": "file",
+			"description": "is time x H with H different HRFs to choose from for the library-of-HRFs approach. We automatically normalize each HRF to peak at 1. Default is to generate a library of 20 HRFs (see getcanonicalhrflibrary.m).Note that if \u003cwantlibrary\u003e is 0, \u003chrflibrary\u003e is clobbered with the contents of \u003chrftoassume\u003e, which in effect causes a single assumed HRF to be used.",
+			"optional": true
+		},
+		"hrftoassume": {
+			"base": "file",
+			"description": "is time x 1 with an assumed HRF that characterizes the evoked response to each trial. We automatically divide by the maximum value so that the peak is equal to 1. Default is to generate a canonical HRF (see getcanonicalhrf.m). Note that the HRF supplied in \u003chrftoassume\u003e is used in only two instances: (1) it is used for the simple ONOFF type-A model, and (2) if the user sets \u003cwantlibrary\u003e to 0, it is also used for the type-B, type-C, and type-D models.",
+			"optional": true
+		},
+		"pcR2cutoffmask": {
+			"base": "file",
+			"description": "is X x Y x Z (or XYZ x 1) with 1s indicating all possible voxels to consider when selecting the subset of voxels. 1 means all voxels can be potentially selected. Default: 1.",
+			"optional": true
+		}
+	},
+	"config": {
+		"brainR2": {
+			"default": "[]",
+			"description": "is an R^2 value (percentage). After fitting the type-A model, voxels whose R^2 is below this value are allowed to enter the noise pool. Default is [] which means to automatically determine a good value.",
+			"type": "string"
+		},
+		"brainthresh": {
+			"default": "[99 0.1]",
+			"description": "is [A B] where A is a percentile for voxel intensity values and B is a fraction to apply to the percentile. These parameters are used in the selection of the noise pool. Default: [99 0.1].",
+			"type": "string"
+		},
+		"chunknum": {
+			"default": "50000",
+			"description": "Is the number of voxels that we will process at the same time. This number should be large in order to speed computation, but should not be so large that you run out of RAM. Default: 50000.",
+			"type": "string"
+		},
+		"firdelay": {
+			"default": "30",
+			"description": "is the total time duration in seconds over which to estimate the run-wise FIR model (where we assume an ONOFF design matrix in which all conditions are collapsed together). Default: 30.",
+			"type": "string"
+		},
+		"firpct": {
+			"default": "99",
+			"description": "is a percentile threshold. We average the FIR model R2 values across runs and then select voxels that pass this threshold. These voxels are used for the FIR timecourse summaries. Default: 99.",
+			"type": "string"
+		},
+		"maxpolydeg": {
+			"default": "use_default",
+			"description": "Is a non-negative integer with the maximum polynomial degree to use for polynomial nuisance functions, which are used to capture low-frequency noise fluctuations in each run. Can be a vector with length equal to the number of runs (this allows you to specify different degrees for different runs). Default is to use round(L/2) for each run where L is the duration in minutes of a given run.",
+			"type": "string"
+		},
+		"numpcstotry": {
+			"default": "10",
+			"description": "is a non-negative integer indicating the maximum number of PCs to enter into the model. Default: 10.",
+			"type": "string"
+		},
+		"pcR2cutoff": {
+			"default": "[]",
+			"description": "is an R^2 value (percentage). To decide the number of PCs to include, we examine a subset of the available voxels. Specifically, we examine voxels whose type-A model R^2 is above \u003cpcR2cutoff\u003e. Default is [] which means to automatically determine a good value",
+			"type": "string"
+		},
+		"pcstop": {
+			"default": "1.05",
+			"description": "-A: a number greater than or equal to 1 indicating when to stop adding PCs into the model. For example, 1.05 means that if the cross-validation performance with the current number of PCs is within 5% of the maximum observed, then use that number of PCs. (Performance is measured relative to the case of 0 PCs.) When \u003cpcstop\u003e is 1, the selection strategy reduces to simply choosing the PC number that achieves the maximum. The advantage of stopping early is to achieve a selection strategy that is robust to noise and shallow performance curves and that avoids overfitting.-B: where B is the number of PCs to use for the final model. B can be any integer between 0 and opt.numpcstotry. Note that if -B case is used, cross-validation is NOT performed for the type-C model, and instead we blindly use B PCs. Default: 1.05.",
+			"type": "string"
+		},
+		"sessionindicator": {
+			"default": "use_default",
+			"description": "Is 1 x n (where n is the number of runs) with positive integers indicating the run groupings that are interpreted as sessions. The purpose of this input is to allow for session-wise z-scoring of single-trial beta weights for the purposes of hyperparameter evaluation. For example, if you are analyzing data aggregated from multiple scan sessions, you may want beta weights to be z-scored per voxel within each session in order to compensate for any potential gross changes in betas across scan sessions. Note that the z-scoring has effect only INTERNALLY: it is used merely to calculate the cross-validation performance and the associated hyperparameter selection; the outputs of this function do not reflect z-scoring, and the user may wish to post-hoc apply z-scoring. Default: 1*ones(1,n) which means to interpret all runs as coming from the same session.",
+			"type": "string"
+		},
+		"stimdur": {
+			"description": "Is the duration of a trial in seconds. For example, 3.5 means that you expect the neural activity from a given trial to last for 3.5 s.",
+			"optional": false,
+			"type": "string"
+		},
+		"tr": {
+			"description": "is the sampling rate in seconds. For example, 1 means that we get a new time point every 1 s. Note that \u003ctr\u003e applies to both \u003cdesign\u003e and \u003cdata\u003e.",
+			"optional": false,
+			"type": "string"
+		},
+		"wantautoscale": {
+			"default": "1",
+			"description": "is whether to automatically scale and offset the model estimates from the type-D model to best match the unregularized estimates. Default: 1.",
+			"type": "string"
+		},
+		"wantfileoutputs": {
+			"default": "[1 1 1 1]",
+			"description": "Is a logical vector [A B C D] indicating four model types to save to disk (assuming that they are computed). A = 0/1 for saving the results of the ONOFF model, B = 0/1 for saving the results of the FITHRF model, C = 0/1 for saving the results of the FITHRF_GLMDENOISE model, D = 0/1 for saving the results of the FITHRF_GLMDENOISE_RR model. Default: [1 1 1 1] which means save all computed results to disk.",
+			"type": "string"
+		},
+		"wantfracridge": {
+			"default": "1",
+			"description": "0 means do not perform ridge regression, 1 means perform ridge regression",
+			"type": "string"
+		},
+		"wantglmdenoise": {
+			"default": "1",
+			"description": "0 means do not perform GLMdenoise, 1 means perform GLMdenoise.",
+			"type": "string"
+		},
+		"wantlibrary": {
+			"default": "1",
+			"description": "0 means use an assumed HRF, 1 means determine the best HRF for each voxel using the library-of-HRFs approach",
+			"type": "string"
+		},
+		"wantlss": {
+			"default": "0",
+			"description": "is 0/1 indicating whether least-squares-separate estimates are desired. If 1, then the type-B model will be estimated using the least-squares-separate method (as opposed to ordinary least squares). Default: 0.",
+			"type": "string"
+		},
+		"wantmemoryoutputs": {
+			"default": "[0 0 0 1]",
+			"description": "Is a logical vector [A B C D] indicating which of the four model types to return in the output \u003cresults\u003e. The user must be careful with this, as large datasets can require a lot of RAM. If you do not request the various model types, they will be cleared from memory (but still potentially saved to disk). Default: [0 0 0 1] which means return only the final type-D model.",
+			"type": "string"
+		},
+		"wantpercentbold": {
+			"default": "1",
+			"description": "Is whether to convert amplitude estimates to percent BOLD change. This is done as the very last step, and is accomplished by dividing by the absolute value of 'meanvol' and multiplying by 100. (The absolute value prevents negative values in meanvol from flipping the sign.) Default: 1.",
+			"type": "string"
+		},
+		"xvalscheme": {
+			"default": "use_default",
+			"description": "Is a cell vector of vectors of run indices, indicating the cross-validation scheme. For example, if we have 8 runs, we could use {[1 2] [3 4] [5 6] [7 8]} which indicates to do 4 folds of cross-validation, first holding out the 1st and 2nd runs, then the 3rd and 4th runs, etc. Default: {[1] [2] [3] ... [n]} where n is the number of runs.",
+			"type": "string"
+		}
+	},
+	"author": "Ozzy Taskin",
+	"maintainer": "Ozzy Taskin",
+	"license": "Other",
+	"source": "https://github.com/cvnlab/GLMsingle",
+	"url": "",
+	"custom": {
+		"flywheel": {
+			"suite": "GKAguirreLab"
+		},
+		"gear-builder": {
+			"category": "analysis",
+			"image": "gkaguirrelab/glmsingle:latest"
+		}
+	}
+}

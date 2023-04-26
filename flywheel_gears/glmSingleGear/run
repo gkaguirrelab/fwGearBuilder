@@ -1,0 +1,113 @@
+#!/usr/local/bin/python3.7
+
+import os
+import json
+
+# Set initial Flywheel paths
+flywheel_base ='/flywheel/v0/'
+manifest_file = os.path.join(flywheel_base, 'manifest.json')
+config_path = os.path.join(flywheel_base, 'config.json')
+first_output_dir = '/firstOutput' # Working in the flywheel output folder might cause issues so creating a first level output folder 
+os.system('mkdir %s'%first_output_dir)
+final_output_dir = os.path.join(flywheel_base, 'output')
+
+# Set paths to the functions
+matlab_func = '/opt/compiledGlmSingle/run_glmSingleWrapper.sh'
+
+# Set paths to the tools 
+mcr_path = '/usr/local/MATLAB/MATLAB_Runtime/v98' #path to MATLAB runtime
+
+###################Parse Config Here###########################################
+
+with open(config_path) as config_file:
+    job_config = json.load(config_file)
+config = job_config['config']
+
+stimdur = config['stimdur']
+tr = config['tr']
+wantlibrary = config['wantlibrary']
+wantglmdenoise = config['wantglmdenoise']
+wantfracridge = config['wantfracridge']
+chunknum = config['chunknum']
+xvalscheme = config['xvalscheme']
+sessionindicator = config['sessionindicator']
+wantfileoutputs = config['wantfileoutputs']
+wantmemoryoutputs = config['wantmemoryoutputs']
+maxpolydeg = config['maxpolydeg']
+wantpercentbold = config['wantpercentbold']
+firdelay = config['firdelay']
+firpct = config['firpct']
+wantlss = config['wantlss']
+numpcstotry = config['numpcstotry']
+brainthresh = config['brainthresh']
+brainR2 = config['brainR2']
+pcR2cutoff = config['pcR2cutoff']
+pcstop = config['pcstop']
+wantautoscale = config['wantautoscale']
+
+################### Input Files ###############################################
+
+# Get the input images
+func_images = []
+for i in range(10):
+    image_number = i+1  
+    if image_number < 10: 
+        image_number_string = '0' + str(image_number)
+    else:
+        image_number_string = str(image_number)  
+
+    image_path_and_name = os.path.join(flywheel_base, 'input', 'func%s' % image_number_string) 
+    if os.path.exists(image_path_and_name):
+        main_image = os.path.join(image_path_and_name, os.listdir(image_path_and_name)[0])
+        func_images.append(main_image)
+    else:
+        func_images.append('[]')
+
+# Path to input folders 
+design = os.path.join(flywheel_base, 'input/design') # That is a required input 
+
+extraregressorsPath = os.path.join(flywheel_base, 'input/extraregressors')
+if os.path.isdir(extraregressorsPath) == True:   
+    extraregressors = os.path.join(extraregressorsPath, os.listdir(extraregressorsPath)[0])
+else:
+    extraregressors = '[]'
+
+hrftoassumePath = os.path.join(flywheel_base, 'input/hrftoassume')
+if os.path.isdir(hrftoassumePath) == True:   
+    hrftoassume = os.path.join(hrftoassumePath, os.listdir(hrftoassumePath)[0])
+else:
+    hrftoassume = '[]'
+
+hrflibraryPath = os.path.join(flywheel_base, 'input/hrflibrary')
+if os.path.isdir(hrflibraryPath) == True:   
+    hrflibrary = os.path.join(hrflibraryPath, os.listdir(hrflibraryPath)[0])
+else:
+    hrflibrary = '[]'
+
+pcR2cutoffmaskPath = os.path.join(flywheel_base, 'input/pcR2cutoffmask')
+if os.path.isdir(pcR2cutoffmaskPath) == True:   
+    pcR2cutoffmask = os.path.join(pcR2cutoffmaskPath, os.listdir(pcR2cutoffmaskPath)[0])
+else:
+    pcR2cutoffmask = '[]'
+
+fracsPath = os.path.join(flywheel_base, 'input/fracs')
+if os.path.isdir(fracsPath) == True:   
+    fracs = os.path.join(fracsPath, os.listdir(fracsPath)[0])
+else:
+    fracs = '[]'
+    
+brainexcludePath = os.path.join(flywheel_base, 'input/brainexclude')
+if os.path.isdir(brainexcludePath) == True:   
+    brainexclude = os.path.join(brainexcludePath, os.listdir(brainexcludePath)[0])
+else:
+    brainexclude = '[]'
+    
+######################### Run Algorithm #######################################
+
+cmd = f'"{matlab_func}" "{mcr_path}" "{design}" "{func_images[0]}" "{func_images[1]}" "{func_images[2]}" "{func_images[3]}" "{func_images[4]}" "{func_images[5]}"'
+f'"{func_images[6]}" "{func_images[7]}" "{func_images[8]}" "{func_images[9]}" "{stimdur}" "{tr}" "{final_output_dir}" "{wantlibrary}" "{wantglmdenoise}"'
+f'"{wantfracridge}" "{chunknum}" "{xvalscheme}" "{sessionindicator}" "{wantfileoutputs}" "{wantmemoryoutputs}" "{extraregressors}" "{maxpolydeg}" "{wantpercentbold}"'
+f'"{hrftoassume}" "{hrflibrary}" "{firdelay}" "{firpct}" "{wantlss}" "{numpcstotry}" "{brainthresh}" "{brainR2}" "{brainexclude}" "{pcR2cutoff}" "{pcR2cutoffmask}"'
+f'"{pcstop}" "{fracs}" "{wantautoscale}"'
+
+os.system(cmd)
