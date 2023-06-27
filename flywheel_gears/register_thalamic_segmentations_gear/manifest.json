@@ -1,0 +1,79 @@
+{
+	"name": "register-thalamic-segmentations",
+	"label": "registerThalamicSegmentations: Register thalamic segmentations to FOD space",
+	"description": "This tool takes the results of freesurfer thalamic segmentations and linearly registers them to qsirecon FOD images. Requires qsirecon output in T1w and recon all archive for the registration",
+	"version": "0.1.7",
+	"inputs": {
+		"targetImage": {
+			"base": "file",
+			"description": "Image to use as a target image for the segmentation registration",
+			"optional": false
+		},
+		"thalamicSegmentationArchive": {
+			"base": "file",
+			"description": "Thalamic segmentation archive produced by segmentthalamicnuclei gear",
+			"optional": false,
+			"type": {
+				"enum": [
+					"archive"
+				]
+			}
+		},
+		"reconAllGearOutput": {
+			"base": "file",
+			"description": "Input a recon all archive if you want to use bbregister method",
+			"optional": true,
+			"type": {
+				"enum": [
+					"archive"
+				]
+			}
+		},
+		"freesurferLicense": {
+			"base": "file",
+			"description": "Input a freesurfer license if you want to use bbregister method",
+			"optional": true
+		}
+	},
+	"config": {
+		"subject_id": {
+			"default": "subject",
+			"description": "Subject ID.",
+			"type": "string"
+		},
+		"registration_tool": {
+			"default": "bbregister",
+			"description": "Tool to use for the registration. Can be bbregister or flirt. Default bbregister.",
+			"type": "string"
+		},
+		"dof": {
+			"default": "12",
+			"description": "Degrees of freedom for the registration. Can enter 6, 9, or 12",
+			"type": "string"
+		},
+		"verbose": {
+			"default": "0",
+			"description": "Verbose.",
+			"type": "string"
+		},
+		"reorient_to_std": {
+			"default": "0",
+			"description": "Run Fsl reorient2std before registering. Should be enabled if registering to qsiprep output.",
+			"type": "string"
+		}		
+	},
+	"author": "Ozenc Taskin",
+	"maintainer": "Ozenc Taskin",
+	"license": "Other",
+	"source": "https://github.com/gkaguirrelab/segmentThalamicNucleiGear/register_thalamic_segmentations_gear",
+	"url": "https://github.com/gkaguirrelab/segmentThalamicNucleiGear/register_thalamic_segmentations_gear",
+	"custom": {
+		"flywheel": {
+			"suite": "GKAguirreLab"
+		},
+		"gear-builder": {
+			"category": "analysis",
+			"image": "gkaguirrelab/register-thalamic-segmentations-gear:latest"
+		}
+	}
+}
