@@ -3,50 +3,52 @@
 # Stuff you’ll need
 
 -	MATLAB compiler: We need this to compile our MATLAB functions. It can be downloaded through “Get More Apps” menu in MATLAB. Once it is installed, make sure you can call “mcc” on your Linux Terminal.
--	A Linux computer: Docker mainly works with Unix images and MATLAB compiler creates executables specific to the OS it is run under. So to be able to run MATLAB in Docker, we need to compile our code with a Unix Machine.
--	MATLAB Runtime: We will need this to test the compiled code to make sure it works before we stick it in a gear. Download it here: https://www.mathworks.com/products/compiler/matlab-runtime.html The version you install should match your MATLAB version or the version under which you compiled your MATLAB functions.
--	Flywheel CLI to make the gear. Download instructions here: https://docs.flywheel.io/hc/en-us/articles/360008162214-Installing-the-Flywheel-Command-Line-Interface-CLI-
-Make sure you can call fw from a terminal. Set path to the binary if you cannot. Once you can call it run: “fw login -h <API-key>” with your API key.
+-	A Linux computer: Docker mainly works with Unix images and MATLAB compiler creates executables specific to the OS that it is run under. So to be able to run MATLAB in Docker, we need to compile our code with a Unix Machine.
+-	MATLAB Runtime: We will need this to test the compiled code to make sure it works before we stick it in a gear. Download it here: https://www.mathworks.com/products/compiler/matlab-runtime.html The version you install should match your MATLAB version (or more specifically the version you use to compile your MATLAB functions.
+-	Flywheel CLI to make the gear. Download instructions here: https://docs.flywheel.io/CLI/
+
+Make sure you can call fw from a terminal. Set path to the binary you downloaded in your .bashrc if you cannot. Once you can call it, run: “fw login -h <API-key>” with your API key to login.
 
 # Instructions
 
-Compile a MATLAB function
-We first need to compile our matlab function. When we run the compiled function on a bash terminal, passing anything other than strings to it makes things a bit complicated. Therefore, it is a good idea to make a wrapper around the function we want to compile. This wrapper will receive every input we will use in our function as a string and then convert them to their appropriate type.
+Compile a MATLAB function: 
+
+We first need to compile our matlab function so that we can execute it from a Linux terminal. Compiled functions work best with string arguments. So if you want to compile a function that requires cell or struct input, it is a good idea to create a wrapper around it first. This wrapper will receive every input we will use in our function as a string and then convert them to their appropriate type.
 
 1 - Check out fwGearBuilder/gear_building_instructions/example_gear/exampleFunction.m. This function gets a text file (called exampletext.txt located on the same directory) which contains a comma separated vector, does some operations on it and saves a new text file.
 
-2 - Now check out exampleWrapper.m. This is a wrapper that takes the variables as strings, converts them to appropriate type and pass them to the exampleFunction.m. You’ll need to make a wrapper like this for your own function. If your function uses a bunch of sub functions, no worries. You’ll need to make this wrapper just for your main function.
+2 - Now check out exampleWrapper.m. This is a wrapper that takes the variables as strings, converts them to appropriate type and pass them to the exampleFunction.m. You’ll need to make a wrapper like this for your own function. You just need to do this for the main function you want to compile. If this main function calls other sub-functions, they will work fine.  
 
-3 - Now we can compile the wrapper. If you use ToolboxToolbox, we need to disable it first as the startup options complicate the compiling process. Just go to your Documents/MATLAB folder and rename your startup.m to something else (e.g nostartup.m) until we finish compiling. Next call mcc from a bash terminal as following:
+3 - Now we can compile the wrapper we created. If you use ToolboxToolbox, we need to disable it first as the startup options complicate the compiling process. Just go to your Documents/MATLAB folder and rename your startup.m to something else (e.g nostartup.m) until we finish compiling. Matlab might be creating another startup file in Linux everytime you open it. This is saved in /home/<username>. You can just delete this one. Next call mcc from a bash terminal as following:
 
 	mcc -m exampleWrapper.m -a exampleFunction.m -d <saveFolder>
 
-This will compile the your wrapper and save the output to a folder you specify with the -d option. If your function calls any sub functions, you need to add path to them with more -a flags. In our case, our main function is the only sub function of the wrapper. If you have multiple sub functions in a folder, the compiler can search for them automatically if you use the -I <path_to_folder> option. Warning: This folder search option does not descent into sub folders automatically. If you have your sub functions in nested folders, set path to each of them with multiple -I options.
+This will compile the your wrapper and save the output to a folder you specify with the -d option. If your function calls any sub functions, you need to add path to them with more -a flags. In our case, our main function is the only sub function of the wrapper. If you have multiple sub functions in a folder, the compiler can search for them automatically if you use the -I <path_to_folder> option. Warning: This folder search option does not descent into sub folders automatically. If you have your sub functions in multiple nested folders, set path to each of them with multiple -I options.
 
 4 - Now we need to test the compiled code with MATLAB runtime to make sure it works. Here is how it is ran:
  
-	‘<compiledBashFile>’  ‘<matlabRuntimeInstallationPath>’  ‘<input1>’  ‘<input2>’  ‘<input3>’ …
+	‘<compiledBashFile>’  ‘<matlabRuntimeInstallationPath>’  ‘<input1>’  ‘<input2>’  ‘<input3>'
 
-If you had two varargin options for example, say runSpeed and saveIntermediateFiles, in your script, here is how you would set those when you run the compiled code:
+If you had two varargin options, say for instance runSpeed and saveIntermediateFiles, here is how you would set those when you run the compiled code:
  
 	‘<compiledBashFile>’  ‘<matlabRuntimeInstallationPath>’  ‘<input1>’  ‘<input2>’  ‘ runSpeed’  ‘fast’  ‘saveIntermediateFiles’  ‘true’
 
-Note: This is how the matlabRuntimeInstallationPath looks like: '/usr/local/MATLAB/R2020a/MATLAB_Runtime/v98/'.
-Don’t forget to include the “v98” subfolder part in it (your version can be different though, e.g v97, v99).
+Note: This is how the matlabRuntimeInstallationPath should look like: '/usr/local/MATLAB/R2020a/MATLAB_Runtime/v98/'.
+Don’t forget to include the “v98” subfolder part in it (your version can be different though based on your matlab version, e.g v97, v99).
 
-As an example, here is how we test the compiled exampleWrapper function:
+Here is how we would test the exampleWrapper we created:
 
 	'/run_exampleWrapper.sh' '/usr/local/MATLAB/MATLAB_Runtime/v98/' '/exampletext.txt' '[1,1,1,1,1]' '2' 'true' '/home/outputText.txt'
 
 This takes the vector in exampletext.txt, adds [1,1,1,1,1], scales by 2, transposes the vector, and saves it as outputText.txt to the home directory.
 
-Assembling the gear files and making the gear
+Assembling the gear files and making the gear:
 
 1 – Create an empty folder where we will assemble the gear files. Check out: /fwGearBuilder/gear_building_instructions/example_gear/gear_files
 
-Once you are done with all the steps below, your gear folder should look this example one.  
+Once you are done with all the steps below, your gear folder should look like this example one.  
 
-2 – Even though we tested the compiled code with just the .sh executable, we’ll need every file that mcc created. So copy the entire folder that contains all the mcc output into the gear folder we created at step 1.
+2 – Even though we tested the compiled code just by using the .sh executable, we’ll need every file that mcc created. So copy the entire folder that contains all the mcc output into the gear folder we created at step 1.
 
 3 – In the gear folder we now need to create a Dockerfile. DockerFile is a template for our Docker image. Here we install every tool and software we’ll need in the gear including matlab runtime. Check out the Dockerfile example located in fwGearBuilder/gear_building_instructions/example_gear/gear_files. This example file has comments for each line explaining what we are doing. Continue reading the instructions once you have a Dockerfile for your gear.
 
